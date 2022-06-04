@@ -88,7 +88,7 @@ class YAxis {
         }
         this.material = new MeshPhongMaterial ( this.paramMaterial )
         this.createGeometry ( )
-        this.axis.mw.coordinate.yDirection = this.direction
+        this.axis.exp.coordinate.yDirection = this.direction
     }
 
     createGeometry ( ) {
@@ -125,7 +125,7 @@ class YAxis {
 
         this.insertText ( 'y', this.fontSize, this.textYPosition )
         this.insertPeriods ( )
-        this.axis.mw.stage.scene.add ( this.rootGroup )        
+        this.axis.exp.stage.scene.add ( this.rootGroup )        
     }
 
     setPositions (
@@ -385,7 +385,7 @@ class YAxis {
 
         console.log ( 'Axis free' )
     
-        if ( this.axis.mw.stage ) {
+        if ( this.axis.exp.stage ) {
 
             if ( this.yMesh ) {
 
@@ -440,7 +440,7 @@ class YAxis {
                 this.rootGroup.remove( this.periodGroup )
             }
         }
-        this.axis.mw.stage.scene.remove ( this.rootGroup )
+        this.axis.exp.stage.scene.remove ( this.rootGroup )
     }
 }
 

@@ -1,6 +1,6 @@
 import Plane                from "src/explainerApi/add/plane/plane";
 import { Vector2, Vector3 } from "three";
-import { MW }               from "../explainer";
+import { Explainer }               from "../explainer";
 import { Axis }             from "./axis/axis";
 import Cube                 from "./cube/cube";
 import Curve                from "./curve/curve";
@@ -18,9 +18,9 @@ export class Add {
     public curves:  Curve[]     = []
     public lines:   Line[]      = []
 
-    constructor ( protected mw: MW ) {
+    constructor ( protected exp: Explainer ) {
         
-        this.axis = new Axis ( this.mw )
+        this.axis = new Axis ( this.exp )
     }
     
     cube (  
@@ -30,7 +30,7 @@ export class Add {
         position: [ number, number, number ] 
     ) {
 
-        const cube = new Cube ( this.mw, size, color, emissive, position )
+        const cube = new Cube ( this.exp, size, color, emissive, position )
         this.cubes.push ( cube )
         return cube
     }
@@ -42,7 +42,7 @@ export class Add {
         position: [ number, number, number ] 
     ) {
 
-        const plane = new Plane ( this.mw, size, color, emissive, position )
+        const plane = new Plane ( this.exp, size, color, emissive, position )
         this.planes.push ( plane )
         return plane
     }
@@ -54,7 +54,7 @@ export class Add {
         position: [ number, number, number ] 
     ) {
 
-        const sphere = new Sphere ( this.mw, size, color, emissive, position )
+        const sphere = new Sphere ( this.exp, size, color, emissive, position )
         this.spheres.push ( sphere )
         return sphere
     }
@@ -67,7 +67,7 @@ export class Add {
         position:   [ number, number, number ] 
     ) {
 
-        const text3D = new Text ( this.mw, text, size, color, emissive, position )
+        const text3D = new Text ( this.exp, text, size, color, emissive, position )
         this.text3Ds.push ( text3D )
         return text3D
     }
@@ -100,7 +100,7 @@ export class Add {
             }
         }
         
-        const curve = new Curve ( this.mw, pts, size, color, emissive )
+        const curve = new Curve ( this.exp, pts, size, color, emissive )
         this.curves.push ( curve )
         return curve
     }
@@ -133,7 +133,7 @@ export class Add {
             }
         }
         
-        const line = new Line ( this.mw, pts, size, color, emissive )
+        const line = new Line ( this.exp, pts, size, color, emissive )
         this.lines.push ( line )
         return line
     }

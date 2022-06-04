@@ -1,6 +1,6 @@
 import TWEEN, { now }                           from "@tweenjs/tween.js"
 import { TimeNode, StartTimeModel }             from "src/explainerApi/model"
-import { MW }                                   from "src/explainerApi/explainer"
+import { Explainer }                                   from "src/explainerApi/explainer"
 //import { setDefaultValue, setMarks, setValue }  from "store/player/playerSlice"
 //import { setMax, setMin, setStep }              from "store/player/playerSlice"
 import { setDefaultValue, setMarks, setValue }  from "src/explainerApi/player/player"
@@ -31,7 +31,7 @@ class AnimateManager {
     //Tween
     public pause                            = false
     
-    constructor( protected mw: MW ) {
+    constructor( protected exp: Explainer ) {
         
     }
 
@@ -336,7 +336,7 @@ class AnimateManager {
             TWEEN.update (  )
         }
     
-        this.mw.stage.render ( )
+        this.exp.stage.render ( )
     }
 }
 

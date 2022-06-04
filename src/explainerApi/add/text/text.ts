@@ -1,4 +1,4 @@
-import { MW } from "src/explainerApi/explainer"
+import { Explainer } from "src/explainerApi/explainer"
 import { 
     DoubleSide, 
     Mesh, 
@@ -10,7 +10,7 @@ import {
 
 class Text {
 
-    protected mw:       MW
+    protected exp:       Explainer
 
     public paramMaterial = {
 
@@ -39,7 +39,7 @@ class Text {
 
     constructor ( 
 
-        mw: MW, 
+        exp: Explainer, 
         text: string,
         size: number, 
         color: number, 
@@ -47,13 +47,13 @@ class Text {
         position: [ number, number, number ] 
     ) {
 
-        this.mw = mw
+        this.exp = exp
         this.text = text
         this.size = size
         this.paramMaterial.color = color
         this.paramMaterial.emissive = emissive
 
-        const pos = mw.coordinate.mathWayToWorldTo (
+        const pos = exp.coordinate.mathWayToWorldTo (
 
             new Vector2 ( position[0], position[1] ),
             position[2]
@@ -75,7 +75,7 @@ class Text {
     create ( ) {
 
         const material = new MeshStandardMaterial(this.paramMaterial)
-        const shapes    = this.mw.font.generateShapes ( this.text, this.size )
+        const shapes    = this.exp.font.generateShapes ( this.text, this.size )
         const geometry  = new ShapeGeometry ( shapes )
 
         geometry.computeBoundingBox()
@@ -102,7 +102,7 @@ class Text {
 
         if ( this.textMesh ) {
 
-            this.mw.stage.scene.add ( this.textMesh )
+            this.exp.stage.scene.add ( this.textMesh )
         }
     }
 }

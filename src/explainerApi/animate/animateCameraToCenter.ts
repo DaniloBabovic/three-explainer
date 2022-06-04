@@ -1,20 +1,20 @@
 import TWEEN        from "@tweenjs/tween.js"
-import { MW }       from "src/explainerApi/explainer"
+import { Explainer }       from "src/explainerApi/explainer"
 import { Vector3 }  from "three"
 import { Stage }    from "../scene/stage"
 
 class AnimateCameraToCenter {
 
-    protected mw: MW
+    protected exp: Explainer
     protected stage: Stage
     protected animation_done: boolean
     protected animation_1_done: boolean
     protected print: boolean
 
-    constructor ( mw: MW ) {
+    constructor ( exp: Explainer ) {
 
-        this.mw = mw
-        this.stage = mw.stage
+        this.exp = exp
+        this.stage = exp.stage
 
         this.animation_done = false
         this.animation_1_done = false

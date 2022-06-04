@@ -1,10 +1,10 @@
-import { MW } from "src/explainerApi/explainer"
+import { Explainer } from "src/explainerApi/explainer"
 import { Camera, Intersection, Object3D, Raycaster, Scene, Vector2, Event, Vector3 } from "three"
 import { Stage } from "./stage"
 
 class Pick {
 
-    protected mw: MW
+    protected exp: Explainer
     protected stage: Stage | null
     protected print: boolean
     protected camera: Camera | null
@@ -17,13 +17,13 @@ class Pick {
     protected INTERSECTED: Intersection<Object3D<Event>>[] | null = null
     protected mouseWorldPosition = new Vector3 ()
 
-    constructor ( mw: MW ) {
+    constructor ( exp: Explainer ) {
 
-        this.mw = mw
-        this.stage = mw.stage
-        this.camera = mw.stage.camera
-        this.scene = mw.stage.scene
-        this.container = mw.stage.containerElement
+        this.exp = exp
+        this.stage = exp.stage
+        this.camera = exp.stage.camera
+        this.scene = exp.stage.scene
+        this.container = exp.stage.containerElement
 
         this.print = false
 
@@ -40,10 +40,10 @@ class Pick {
 
     onPointerMove( event: MouseEvent ) {
 
-        if ( this.mw.pickEnable ==  false ) return
+        if ( this.exp.pickEnable ==  false ) return
         if ( this.container ) {
 
-            this.mw.coordinate.onScreenPosition ( event.offsetX, event.offsetY )
+            this.exp.coordinate.onScreenPosition ( event.offsetX, event.offsetY )
             this.pointer.x = ( ( event.offsetX  ) / this.container.offsetWidth ) * 2 - 1
             this.pointer.y = - ( ( event.offsetY) / this.container.offsetHeight ) * 2 + 1
             if ( this.print ) {
@@ -76,7 +76,7 @@ class Pick {
             this.mouseWorldPosition.x = intersection.point.x
             this.mouseWorldPosition.y = intersection.point.y
             this.mouseWorldPosition.z = intersection.point.z
-            this.mw.coordinate.onWorldPosition ( intersection.point )
+            this.exp.coordinate.onWorldPosition ( intersection.point )
             //console.log ( 'intersection', intersection.point.x, intersection.point.y )
         }
     }

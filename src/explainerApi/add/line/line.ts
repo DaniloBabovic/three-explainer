@@ -1,4 +1,4 @@
-import { MW } from "src/explainerApi/explainer";
+import { Explainer } from "src/explainerApi/explainer";
 import { 
     BufferGeometry,
     DoubleSide, 
@@ -10,7 +10,7 @@ import {
 
 class Lines {
 
-    protected mw:       MW
+    protected exp:       Explainer
 
     public paramMaterial = {
 
@@ -36,7 +36,7 @@ class Lines {
     
     constructor ( 
 
-        mw: MW, 
+        exp: Explainer, 
         points: [ number, number, number ][],
         size: number, 
         color: number, 
@@ -45,7 +45,7 @@ class Lines {
         for (let i = 0; i < points.length; i++) {
 
             const p = points[i]
-            const pos = mw.coordinate.mathWayToWorldTo (
+            const pos = exp.coordinate.mathWayToWorldTo (
 
                 new Vector2 ( p[0], p[1] ),
                 p[2]
@@ -56,7 +56,7 @@ class Lines {
             }
         }
         
-        this.mw = mw
+        this.exp = exp
         this.size = size
         this.paramMaterial.color = color
         this.paramMaterial.emissive = emissive
@@ -85,7 +85,7 @@ class Lines {
 
         if ( this.line ) {
 
-            this.mw.stage.scene.add ( this.line )
+            this.exp.stage.scene.add ( this.line )
         }
     }
 }

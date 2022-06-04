@@ -1,6 +1,6 @@
 import TWEEN, { Tween, now }        from "@tweenjs/tween.js"
 import { TimeNode }                 from "src/explainerApi/model"
-import { MW }                       from "src/explainerApi/explainer"
+import { Explainer }                       from "src/explainerApi/explainer"
 
 import { Line, Material }           from "three"
 import { Mesh, Vector3 }            from "three"
@@ -29,7 +29,7 @@ class Animate {
         protected manager:      AnimateManager,
         public    id:           number,
         public    name:         string,
-        protected mw:           MW,
+        protected exp:           Explainer,
         public    after:        Animate | null = null,
         public    sec:          number,
         public    delay:        number,
@@ -43,7 +43,7 @@ class Animate {
     ) {
         console.log(id)
         
-        this.stage = mw.stage
+        this.stage = exp.stage
         this.done = false        
         this.print = true
 
@@ -85,7 +85,7 @@ class Animate {
 
     convertPositions ( ) {
 
-        const destinationVector = this.mw.coordinate.mathWayToWorldTo ( new Vector2 ( this.to.x, this.to.y ),this.to.z )
+        const destinationVector = this.exp.coordinate.mathWayToWorldTo ( new Vector2 ( this.to.x, this.to.y ),this.to.z )
         
         if ( destinationVector ) {
 
@@ -93,7 +93,7 @@ class Animate {
             this.toWorld.y = destinationVector.y
             this.toWorld.z = destinationVector.z            
         }
-        const startVector = this.mw.coordinate.mathWayToWorldTo ( 
+        const startVector = this.exp.coordinate.mathWayToWorldTo ( 
 
             new Vector2 ( this.from.x, this.from.y ),
             this.from.z 

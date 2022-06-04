@@ -1,4 +1,4 @@
-import { MW } from "src/explainerApi/explainer";
+import { Explainer } from "src/explainerApi/explainer";
 import { BoxGeometry, DoubleSide, Mesh, MeshStandardMaterial, Vector2, Vector3 } from "three";
 /* 
 data = {
@@ -12,7 +12,7 @@ data = {
 */
 class Cube {
 
-    protected mw:       MW
+    protected exp:       Explainer
 
     public paramMaterial = {
 
@@ -38,19 +38,19 @@ class Cube {
 
     constructor ( 
 
-        mw: MW, 
+        exp: Explainer, 
         size: number, 
         color: number, 
         emissive: number, 
         position: [ number, number, number ] 
     ) {
 
-        this.mw = mw
+        this.exp = exp
         this.size = size
         this.paramMaterial.color = color
         this.paramMaterial.emissive = emissive
 
-        const pos = mw.coordinate.mathWayToWorldTo (
+        const pos = exp.coordinate.mathWayToWorldTo (
 
             new Vector2 ( position[0], position[1] ),
             position[2]
@@ -86,7 +86,7 @@ class Cube {
 
         if ( this.cube ) {
 
-            this.mw.stage.scene.add ( this.cube )
+            this.exp.stage.scene.add ( this.cube )
         }
     }
 }

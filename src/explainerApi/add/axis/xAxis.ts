@@ -94,7 +94,7 @@ class XAxis {
         this.material = new MeshPhongMaterial ( this.paramMaterial )
 
         this.createGeometry ( )
-        this.axis.mw.coordinate.xDirection = this.direction
+        this.axis.exp.coordinate.xDirection = this.direction
     }
 
     createGeometry ( ) {
@@ -133,7 +133,7 @@ class XAxis {
         this.insertOText ( )
         this.insertText ( 'x', this.fontSize, this.textXPosition )
         this.insertPeriods ( )
-        this.axis.mw.stage.scene.add ( this.rootGroup )     
+        this.axis.exp.stage.scene.add ( this.rootGroup )     
     }
 
     setPositions (
@@ -323,7 +323,7 @@ class XAxis {
         this.rootGroup.add( this.sphere )
         const v = new Vector3 ()
         this.sphere.getWorldPosition ( v )
-        this.axis.mw.coordinate.onOPosition ( v )
+        this.axis.exp.coordinate.onOPosition ( v )
     }
 
     insertText ( text: string, fontSize: number, position: Vector3, skipInsert = false ) {
@@ -464,7 +464,7 @@ class XAxis {
 
         console.log ( 'Axis free' )
     
-        if ( this.axis.mw.stage ) {
+        if ( this.axis.exp.stage ) {
 
             if ( this.sphere ) {
                 this.rootGroup.remove( this.sphere )
@@ -533,7 +533,7 @@ class XAxis {
                 }
                 this.rootGroup.remove( this.periodGroup )
             }
-            this.axis.mw.stage.scene.remove( this.rootGroup )
+            this.axis.exp.stage.scene.remove( this.rootGroup )
         }
     }
 }

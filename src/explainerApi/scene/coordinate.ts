@@ -1,10 +1,10 @@
 import { AxisOptions, Direction, Origin }   from "src/explainerApi/model"
-import { MW }                               from "src/explainerApi/explainer"
+import { Explainer }                               from "src/explainerApi/explainer"
 import { Vector2, Vector3 }                 from "three"
 
 class Coordinate {
 
-    protected mw: MW
+    protected exp: Explainer
     
     protected oPosition = new Vector3 ( 0, 0, 0 )
     protected worldPosition = new Vector3 ( 0, 0, 0 )
@@ -19,10 +19,10 @@ class Coordinate {
 
     public size: number // 200
 
-    constructor( mw: MW ) {
+    constructor( exp: Explainer ) {
         
-        this.mw = mw
-        this.size = mw.add.axis.size
+        this.exp = exp
+        this.size = exp.add.axis.size
     }
 
     onOPosition ( v: Vector3 ) {
@@ -48,7 +48,7 @@ class Coordinate {
 
         if ( this.xDirection == Direction.LEFT_RIGHT ) {
 
-            const center = (this.mw.add.axis.origin == Origin.CENTER)
+            const center = (this.exp.add.axis.origin == Origin.CENTER)
             let oX = this.oPosition.x
             if ( center ) oX -= this.size/2
                     
@@ -65,7 +65,7 @@ class Coordinate {
 
         if ( this.yDirection == Direction.TOP_BOTTOM ) {
 
-            const center = (this.mw.add.axis.origin == Origin.CENTER)
+            const center = (this.exp.add.axis.origin == Origin.CENTER)
             let oY = this.oPosition.y
             if ( center ) oY -= this.size/2
                     
@@ -75,7 +75,7 @@ class Coordinate {
 
         } else {
 
-            const center = (this.mw.add.axis.origin == Origin.CENTER)
+            const center = (this.exp.add.axis.origin == Origin.CENTER)
             let oY = this.oPosition.y
             if ( center ) oY -= this.size/2
                     
@@ -102,7 +102,7 @@ class Coordinate {
         let mathWayY = 0
         if ( this.xDirection == Direction.LEFT_RIGHT ) {
 
-            const center = this.mw.add.axis.origin == Origin.CENTER
+            const center = this.exp.add.axis.origin == Origin.CENTER
             let oX = this.oPosition.x
             if ( center ) oX -= this.size/2
             
@@ -131,7 +131,7 @@ class Coordinate {
         } else {
 
             let oY = this.oPosition.y
-            if ( this.mw.add.axis.origin == Origin.CENTER ) {
+            if ( this.exp.add.axis.origin == Origin.CENTER ) {
                 oY -= this.size/2
             }
             const yRange = Math.abs ( this.optionsY.to - this.optionsY.from ) 

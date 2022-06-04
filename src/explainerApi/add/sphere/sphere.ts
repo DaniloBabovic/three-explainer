@@ -1,4 +1,4 @@
-import { MW } from "src/explainerApi/explainer";
+import { Explainer } from "src/explainerApi/explainer";
 import {
     DoubleSide, 
     Mesh, 
@@ -19,7 +19,7 @@ data = {
 */
 class Sphere {
 
-    protected mw:       MW
+    protected exp:       Explainer
 
     public paramMaterial = {
 
@@ -47,19 +47,19 @@ class Sphere {
 
     constructor ( 
 
-        mw: MW, 
+        exp: Explainer, 
         size: number, 
         color: number, 
         emissive: number, 
         position: [ number, number, number ] 
     ) {
 
-        this.mw = mw
+        this.exp = exp
         this.size = size
         this.paramMaterial.color = color
         this.paramMaterial.emissive = emissive
 
-        const pos = mw.coordinate.mathWayToWorldTo (
+        const pos = exp.coordinate.mathWayToWorldTo (
 
             new Vector2 ( position[0], position[1] ),
             position[2]
@@ -101,7 +101,7 @@ class Sphere {
 
         if ( this.sphereMesh ) {
 
-            this.mw.stage.scene.add ( this.sphereMesh )
+            this.exp.stage.scene.add ( this.sphereMesh )
         }
     }
 }

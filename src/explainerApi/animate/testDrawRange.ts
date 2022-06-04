@@ -1,4 +1,4 @@
-import { mw }                   from "src/explainerApi/explainer"
+import { exp }                   from "src/explainerApi/explainer"
 import {  LineSegments }        from "three"
 import TWEEN, { Tween, now }    from "@tweenjs/tween.js"
 
@@ -13,13 +13,13 @@ class TestDrawRange {
     constructor( ) {
         
         console.log ( 'TestDrawRange' )
-        if ( mw?.add.lines && mw?.add.lines.length > 0 ) {
+        if ( exp?.add.lines && exp?.add.lines.length > 0 ) {
 
-            console.log ( mw?.add.lines[0] )
-            if ( mw?.add.lines[0].line ) {
+            console.log ( exp?.add.lines[0] )
+            if ( exp?.add.lines[0].line ) {
 
-                //this.testDraw ( mw?.add.lines[0].line )
-                this.insertAnimation ( mw?.add.lines[0].line )
+                //this.testDraw ( exp?.add.lines[0].line )
+                this.insertAnimation ( exp?.add.lines[0].line )
             }
         }
     }
@@ -69,7 +69,7 @@ class TestDrawRange {
         requestAnimationFrame ( animate )
 
         TWEEN.update (  )
-        if ( mw ) mw.stage.render ( )
+        if ( exp ) exp.stage.render ( )
    }
 }
 

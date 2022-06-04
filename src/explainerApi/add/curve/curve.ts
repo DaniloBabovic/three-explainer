@@ -1,4 +1,4 @@
-import { MW } from "src/explainerApi/explainer";
+import { Explainer } from "src/explainerApi/explainer";
 import { 
     CatmullRomCurve3,
     DoubleSide, 
@@ -11,7 +11,7 @@ import {
 
 class Curve {
 
-    protected mw:       MW
+    protected exp:       Explainer
 
     public paramMaterial = {
 
@@ -38,7 +38,7 @@ class Curve {
 
     constructor ( 
 
-        mw: MW, 
+        exp: Explainer, 
         points: [ number, number, number ][],
         size: number, 
         color: number, 
@@ -49,7 +49,7 @@ class Curve {
 
             const p = points[i]
             //const point = new Vector3 ( p [ 0 ], p[ 1 ], p[ 2 ] )
-            const pos = mw.coordinate.mathWayToWorldTo (
+            const pos = exp.coordinate.mathWayToWorldTo (
 
                 new Vector2 ( p[0], p[1] ),
                 p[2]
@@ -62,7 +62,7 @@ class Curve {
         }
         //console.log ( 'points', this.points )
         
-        this.mw = mw
+        this.exp = exp
         this.size = size
         this.paramMaterial.color = color
         this.paramMaterial.emissive = emissive
@@ -107,7 +107,7 @@ class Curve {
 
         if ( this.curve ) {
 
-            this.mw.stage.scene.add ( this.curve )
+            this.exp.stage.scene.add ( this.curve )
         }
     }
 }

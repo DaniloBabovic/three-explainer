@@ -1,4 +1,4 @@
-import { MW } from "../../explainer"
+import { Explainer } from "../../explainer"
 import { Font, FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
 import { AxisOptions, defaultOptions, Origin } from "src/explainerApi/model"
 import XAxis from "./xAxis"
@@ -21,7 +21,7 @@ export class Axis {
     public yAxis:           YAxis | null = null
     public sphereRadius     = 1.5
 
-    constructor ( public mw: MW ) {
+    constructor ( public exp: Explainer ) {
         
     }
 
@@ -40,7 +40,7 @@ export class Axis {
 
             this.xAxisOptions = options
         }
-        this.mw.coordinate.optionsX = this.xAxisOptions
+        this.exp.coordinate.optionsX = this.xAxisOptions
         return this
     }
 
@@ -54,7 +54,7 @@ export class Axis {
             
             this.yAxisOptions = options
         }
-        this.mw.coordinate.optionsY = this.yAxisOptions
+        this.exp.coordinate.optionsY = this.yAxisOptions
         return this
     }
 
@@ -68,7 +68,7 @@ export class Axis {
             
             this.zAxisOptions = options
         }
-        this.mw.coordinate.optionsZ = this.zAxisOptions
+        this.exp.coordinate.optionsZ = this.zAxisOptions
         return this
     }
 
@@ -78,7 +78,7 @@ export class Axis {
 
         const self = this
         
-        const font = this.mw.font
+        const font = this.exp.font
         self.font = font
         if ( self.origin == null )  self.origin = Origin.CENTER
 
@@ -90,7 +90,7 @@ export class Axis {
                 font, 
                 self.origin
             )
-            this.mw.xGroup = self.xAxis.rootGroup
+            this.exp.xGroup = self.xAxis.rootGroup
         }
         if ( self.yAxisOptions )  {
 
@@ -100,7 +100,7 @@ export class Axis {
                 font, 
                 self.origin
             )
-            this.mw.yGroup = self.yAxis.rootGroup
+            this.exp.yGroup = self.yAxis.rootGroup
         }            
     }
 
