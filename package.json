@@ -33,7 +33,7 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "explainer",
+  "name": "@mapalchemy/explainer",
   "author": "Danilo Babovic",
   "module": "dist/explainer.esm.js",
   "size-limit": [
