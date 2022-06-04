@@ -1,0 +1,115 @@
+import { MW } from "../../explainer"
+import { Font, FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
+import { AxisOptions, defaultOptions, Origin } from "src/explainerApi/model"
+import XAxis from "./xAxis"
+import YAxis from "./yAxis"
+
+export class Axis {
+
+    public xAxisOptions:    AxisOptions | null = null
+    public yAxisOptions:    AxisOptions | null = null
+    public zAxisOptions:    AxisOptions | null = null
+    public origin:          Origin | null = null
+    
+    public size             = 200
+    public sizeHalf         = 100
+
+    public loader           = new FontLoader ( )
+    public font:            Font | null = null
+
+    public xAxis:           XAxis | null = null
+    public yAxis:           YAxis | null = null
+    public sphereRadius     = 1.5
+
+    constructor ( public mw: MW ) {
+        
+    }
+
+    public setOrigin ( origin: Origin | null) {
+
+        this.origin = origin
+    }
+
+    public addXAxis ( options: AxisOptions | null = null ) {
+
+        if ( !options ) {
+
+            this.xAxisOptions = { ...defaultOptions }
+
+        } else {
+
+            this.xAxisOptions = options
+        }
+        this.mw.coordinate.optionsX = this.xAxisOptions
+        return this
+    }
+
+    public addYAxis ( options: AxisOptions | null = null ) {
+
+        if ( !options ) {
+
+            this.yAxisOptions = { ...defaultOptions }
+
+        } else {
+            
+            this.yAxisOptions = options
+        }
+        this.mw.coordinate.optionsY = this.yAxisOptions
+        return this
+    }
+
+    public addZAxis ( options: AxisOptions | null = null ) {
+        
+        if ( !options ) {
+
+            this.zAxisOptions = { ...defaultOptions }
+
+        } else {
+            
+            this.zAxisOptions = options
+        }
+        this.mw.coordinate.optionsZ = this.zAxisOptions
+        return this
+    }
+
+    public create ( ) {
+
+        console.log ( 'create !!!' )
+
+        const self = this
+        
+        const font = this.mw.font
+        self.font = font
+        if ( self.origin == null )  self.origin = Origin.CENTER
+
+        if ( self.xAxisOptions )  {
+
+            self.xAxis = new XAxis (
+                self, 
+                self.xAxisOptions, 
+                font, 
+                self.origin
+            )
+            this.mw.xGroup = self.xAxis.rootGroup
+        }
+        if ( self.yAxisOptions )  {
+
+            self.yAxis = new YAxis (
+                self, 
+                self.yAxisOptions, 
+                font, 
+                self.origin
+            )
+            this.mw.yGroup = self.yAxis.rootGroup
+        }            
+    }
+
+    public free ( ) {
+
+        console.log ( 'Axis free' )        
+        if ( this.xAxis ) {
+            this.xAxis.free ()
+        }
+    }
+}
+

@@ -1,3 +1,5 @@
+import { createExplainer } from "./explainerApi/explainer"
+
 export const sum = (a: number, b: number) => {
 
 	if ('development' === process.env.NODE_ENV) {
@@ -12,3 +14,4 @@ export const hi = ( name: string ) => {
 	return `Hi ${name}`
 };
 
+export const useExplainer = createExplainer
