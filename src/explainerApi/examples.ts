@@ -1,7 +1,7 @@
 
 import { useExplainer, exp }                 from "./explainer"
 import { Origin }                               from "./model"
-import { /* EllipseCurve, */ Vector2, Vector3 } from "three"
+import { Vector2, Vector3 } from "three"
 
 export const examples = ( ) =>  example_1 ( )
 

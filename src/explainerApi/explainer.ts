@@ -1,6 +1,6 @@
 import { helvetiker_regular }       from "../font"
 import { Mesh, Object3D, Vector3 }  from "three"
-import { Font/* , FontLoader */ }   from "three/examples/jsm/loaders/FontLoader"
+import { Font }   from "three/examples/jsm/loaders/FontLoader"
 import { Add }                      from "./add/add"
 import Animate                      from "./animate/animate"
 import AnimateCameraToCenter        from "./animate/animateCameraToCenter"
