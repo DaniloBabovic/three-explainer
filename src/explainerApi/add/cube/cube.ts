@@ -1,4 +1,4 @@
-import { Explainer } from "src/explainerApi/explainer";
+import { Explainer } from "../../explainer";
 import { BoxGeometry, DoubleSide, Mesh, MeshStandardMaterial, Vector2, Vector3 } from "three";
 /* 
 data = {

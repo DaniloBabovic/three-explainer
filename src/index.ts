@@ -1,6 +1,6 @@
-import { createExplainer } from "./explainerApi/explainer"
+import { createExplainer, Explainer } from "./explainerApi/explainer"
 
-export const sum = (a: number, b: number) => {
+export const sum = (a: number, b: number):number|string => {
 
 	if ('development' === process.env.NODE_ENV) {
 
@@ -9,9 +9,9 @@ export const sum = (a: number, b: number) => {
 	return a + b;
 };
 
-export const hi = ( name: string ) => {  
+export const hi = ( name: string ): string => {  
   
 	return `Hi ${name}`
 };
 
-export const useExplainer = createExplainer
+export const useExplainer = createExplainer as ( divID: string) => Explainer

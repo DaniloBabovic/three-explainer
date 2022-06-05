@@ -1,6 +1,6 @@
 import TWEEN, { Tween, now }        from "@tweenjs/tween.js"
-import { TimeNode }                 from "src/explainerApi/model"
-import { Explainer }                       from "src/explainerApi/explainer"
+import { TimeNode }                 from "../model"
+import { Explainer }                from "../explainer"
 
 import { Line, Material }           from "three"
 import { Mesh, Vector3 }            from "three"

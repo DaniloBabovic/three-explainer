@@ -1,4 +1,4 @@
-import { Explainer } from "src/explainerApi/explainer"
+import { Explainer } from "../explainer"
 import { Camera, Intersection, Object3D, Raycaster, Scene, Vector2, Event, Vector3 } from "three"
 import { Stage } from "./stage"
 

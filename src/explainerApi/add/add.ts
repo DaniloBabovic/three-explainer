@@ -1,4 +1,4 @@
-import Plane                from "src/explainerApi/add/plane/plane";
+import Plane                from "./plane/plane";
 import { Vector2, Vector3 } from "three";
 import { Explainer }               from "../explainer";
 import { Axis }             from "./axis/axis";

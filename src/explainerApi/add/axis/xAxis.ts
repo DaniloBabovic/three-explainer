@@ -1,4 +1,4 @@
-import { AxisOptions, Direction, Origin } from "src/explainerApi/model"
+import { AxisOptions, Direction, Origin } from "../../model"
 import { Font } from 'three/examples/jsm/loaders/FontLoader.js'
 import { ConvexGeometry } from 'three/examples/jsm/geometries/ConvexGeometry.js';
 

@@ -1,4 +1,4 @@
-import { exp }                   from "src/explainerApi/explainer"
+import { exp }                  from "../explainer"
 import {  LineSegments }        from "three"
 import TWEEN, { Tween, now }    from "@tweenjs/tween.js"
 

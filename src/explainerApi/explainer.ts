@@ -1,4 +1,4 @@
-import { helvetiker_regular }       from "src/font"
+import { helvetiker_regular }       from "../font"
 import { Mesh, Object3D, Vector3 }  from "three"
 import { Font/* , FontLoader */ }   from "three/examples/jsm/loaders/FontLoader"
 import { Add }                      from "./add/add"

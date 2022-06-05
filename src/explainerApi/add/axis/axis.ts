@@ -1,6 +1,6 @@
 import { Explainer } from "../../explainer"
 import { Font, FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
-import { AxisOptions, defaultOptions, Origin } from "src/explainerApi/model"
+import { AxisOptions, defaultOptions, Origin } from "../../model"
 import XAxis from "./xAxis"
 import YAxis from "./yAxis"
 

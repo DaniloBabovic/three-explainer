@@ -1,4 +1,4 @@
-import { Explainer } from "src/explainerApi/explainer";
+import { Explainer } from "../../explainer";
 import { 
     CatmullRomCurve3,
     DoubleSide, 

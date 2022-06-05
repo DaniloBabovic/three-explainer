@@ -1,5 +1,5 @@
 import TWEEN        from "@tweenjs/tween.js"
-import { Explainer }       from "src/explainerApi/explainer"
+import { Explainer }from "../explainer"
 import { Vector3 }  from "three"
 import { Stage }    from "../scene/stage"
 

@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "tsdx watch",
-    "build": "tsdx build",
+    "build": "tsdx build --web",
     "commit": "git-cz",
     "acp": "git add . && npm run commit && git push",
     "test": "tsdx test",

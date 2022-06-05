@@ -1,5 +1,5 @@
-import { AxisOptions, Direction, Origin }   from "src/explainerApi/model"
-import { Explainer }                               from "src/explainerApi/explainer"
+import { AxisOptions, Direction, Origin }   from "../model"
+import { Explainer }                        from "../explainer"
 import { Vector2, Vector3 }                 from "three"
 
 class Coordinate {
