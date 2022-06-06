@@ -14,6 +14,7 @@ import   {
 
 import  Stats               from 'three/examples/jsm/libs/stats.module.js'
 import { OrbitControls }    from 'three/examples/jsm/controls/OrbitControls.js'
+//import OrbitControls   from '../orbit.js'
 
 export let stage = null as  ( Stage | null)
 export class Stage {
@@ -83,6 +84,7 @@ export class Stage {
         //const oneRem = parseInt(getComputedStyle(document.documentElement).fontSize)
         
         this.controls = new OrbitControls ( this.camera, this.renderer.domElement)
+        //this.controls = createOrbit  ( this.camera, this.renderer.domElement)
         //this.controls = new MapControls( this.camera, this.renderer.domElement );
         this.controls.mouseButtons = {
             LEFT: MOUSE.PAN,
