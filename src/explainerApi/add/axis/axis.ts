@@ -1,5 +1,5 @@
 import { Explainer } from "../../explainer"
-import { Font, FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
+import { Font } from 'three/examples/jsm/loaders/FontLoader.js'
 import { AxisOptions, defaultOptions, Origin } from "../../model"
 import XAxis from "./xAxis"
 import YAxis from "./yAxis"
@@ -14,7 +14,6 @@ export class Axis {
     public size             = 200
     public sizeHalf         = 100
 
-    public loader           = new FontLoader ( )
     public font:            Font | null = null
 
     public xAxis:           XAxis | null = null
