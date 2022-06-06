@@ -13,7 +13,7 @@ import   {
     WebGLRenderer }         from 'three'
 
 import  Stats               from 'three/examples/jsm/libs/stats.module.js'
-import { OrbitControls }    from 'three/examples/jsm/controls/OrbitControls'
+import { OrbitControls }    from 'three/examples/jsm/controls/OrbitControls.js'
 
 export let stage = null as  ( Stage | null)
 export class Stage {
