@@ -1,5 +1,6 @@
 import { Explainer } from "../../explainer"
 import { Font } from 'three/examples/jsm/loaders/FontLoader.js'
+//const Font = require ('three/examples/jsm/loaders/FontLoader.js')
 import { AxisOptions, defaultOptions, Origin } from "../../model"
 import XAxis from "./xAxis"
 import YAxis from "./yAxis"
