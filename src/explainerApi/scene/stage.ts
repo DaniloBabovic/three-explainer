@@ -128,6 +128,7 @@ export class Stage {
 		    containerElement.appendChild( this.stats.dom )
         }
         this.render ( )        
+        console.log ( 'Stage success' )
     }
 
     insertWall ( ) {

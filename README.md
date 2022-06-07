@@ -1,4 +1,4 @@
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)]
+![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)
 [![NPM Package][npm]][npm-url]
 [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://mathdoc.mapalchemy.com/)
 
@@ -13,6 +13,7 @@ Currently npm is required to build the project.
 ```bash
 npm i @mapalchemy/explainer
 ```
+Note: This library is not stable yet, look for a stable version in a few weeks.
 
 ### Usage ###
 
@@ -116,9 +117,6 @@ const example_1 = ( ) => {
 If everything went well, you should see this:
 
 ![Next.js application](https://mathdoc.mapalchemy.com/logo_big.png)
-
-Note: This library is not stable yet, look for a stable version in a few weeks.
-
 
 
 [npm]: https://img.shields.io/npm/v/@mapalchemy/explainer
