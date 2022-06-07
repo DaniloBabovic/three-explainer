@@ -1,6 +1,5 @@
 import { Explainer } from "../../explainer"
-//import { Font, FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
-import { Font } from '../../font_loader'
+import { Font } from 'three/examples/jsm/loaders/FontLoader.js'
 
 import { AxisOptions, defaultOptions, Origin } from "../../model"
 import XAxis from "./xAxis"
@@ -75,7 +74,7 @@ export class Axis {
 
     public create ( ) {
 
-        console.log ( 'create !!!' )
+        console.log ( 'create X and Y axis.' )
 
         const self = this
         

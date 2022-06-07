@@ -28,7 +28,7 @@ class Coordinate {
     onOPosition ( v: Vector3 ) {
 
         this.oPosition.copy ( v )
-        console.log ( 'onOPosition', v )
+        console.log ( 'Coordinate center =', v )
     }
 
     onWorldPosition ( v: Vector3 ) {

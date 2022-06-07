@@ -1,12 +1,11 @@
 
-import { useExplainer, exp }                 from "./explainer"
-import { Origin }                               from "./model"
-import { Vector2, Vector3 } from "three"
+import { useExplainer, exp } from "./explainer"
+import { Origin }            from "./model"
+import { Vector2, Vector3 }  from "three"
 
 export const examples = ( ) =>  example_1 ( )
 
 const example_1 = ( ) => {
-    
     
     // 3D Explainer APi 
     const exp = useExplainer ( 'three_container' )

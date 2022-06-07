@@ -10,13 +10,20 @@ export const sum = (a: number, b: number):number|string => {
 	return a + b;
 };
 
+if ('development' === process.env.NODE_ENV) {
+
+    console.log('development mode');
+} else {
+
+    console.log('production mode');
+}
+
 export const hi = ( name: string ): string => {  
   
 	return `Hi ${name}`
 };
 
 export const useExplainer = createExplainer as ( divID: string) => Explainer
-
 
 export enum Origin {
 

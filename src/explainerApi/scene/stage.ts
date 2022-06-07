@@ -14,7 +14,6 @@ import   {
 
 import  Stats               from 'three/examples/jsm/libs/stats.module.js'
 import { OrbitControls }    from 'three/examples/jsm/controls/OrbitControls.js'
-//import OrbitControls   from '../orbit.js'
 
 export let stage = null as  ( Stage | null)
 export class Stage {
@@ -56,7 +55,7 @@ export class Stage {
             0.1, 
             10000
         )
-        console.log ( width, height )
+        console.log ( 'hi, width, height of container =', width, height )
         
         this.camera.position.x = this.cameraStartPosition.x
         this.camera.position.y = this.cameraStartPosition.y
