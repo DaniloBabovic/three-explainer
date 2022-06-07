@@ -1,9 +1,18 @@
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)]
 [![NPM Package][npm]][npm-url]
-[![Build Size][build-size]][build-size-url]
+[![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://mathdoc.mapalchemy.com/)
 
 # Explainer - JavaScript 3D library
 
 The aim of the project is to create an easy to use, lightweight, cross-browser, general purpose 3D library for product and science explanations. 
+
+## Installation
+
+Currently npm is required to build the project.
+
+```bash
+npm i @mapalchemy/explainer
+```
 
 ### Usage ###
 
