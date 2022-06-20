@@ -10,6 +10,7 @@ export enum Origin {
 }
 
 export enum AxisName { X, Y, Z }
+
 export enum Direction { 
     LEFT_RIGHT,
     RIGHT_LEFT,

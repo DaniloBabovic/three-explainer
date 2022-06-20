@@ -10,6 +10,8 @@ import Pick                         from "./scene/pick"
 import { createStage, Stage }       from "./scene/stage"
 import Player from "./player/player"
 
+console.log ( 'Imports works' )
+
 export let exp = null as  ( Explainer | null)
 
 export class Explainer {
