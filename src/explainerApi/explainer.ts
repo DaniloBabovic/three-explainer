@@ -8,6 +8,7 @@ import AnimateManager               from "./animate/animateManager"
 import Coordinate                   from "./scene/coordinate"
 import Pick                         from "./scene/pick"
 import { createStage, Stage }       from "./scene/stage"
+import Player from "./player/player"
 
 export let exp = null as  ( Explainer | null)
 
@@ -24,14 +25,16 @@ export class Explainer {
     public yGroup:          Object3D | null = null
     public animationID      = 0
     public animateManager:  AnimateManager
+    public player:          Player
 
     constructor  ( font: Font, divID: string ) {
         
-        this.font           = font
+        this.font           = font        
         this.stage          = createStage ( divID )
         this.add            = new Add ( this )
         this.pick           = new Pick ( this )
         this.coordinate     = new Coordinate ( this )
+        this.player         = new Player ( this )
         this.animateManager = new AnimateManager ( this )
     }
 
@@ -120,20 +123,11 @@ export class Explainer {
         this.stage.free ()
     }
 }
-//const loader   = new FontLoader ( )
-/* 
-const loadFont = async () => {
-            
-    const font = await loader.loadAsync( '/helvetiker_regular.typeface.json' )
-    return font
-} 
-*/
-
 
 export const createExplainer = ( divID: string ) => {
 
-    if ( exp ) exp.free ( )
-    //const font = await loadFont ()
+    if ( exp ) exp.free ( )    
+    
     const font = new Font ( helvetiker_regular )
     exp = new Explainer ( font, divID )
     return exp

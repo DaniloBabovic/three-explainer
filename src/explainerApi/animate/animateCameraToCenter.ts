@@ -1,7 +1,7 @@
 import TWEEN        from "@tweenjs/tween.js"
-import { Explainer }from "../explainer"
+import type { Explainer }from "../explainer"
 import { Vector3 }  from "three"
-import { Stage }    from "../scene/stage"
+import type { Stage }    from "../scene/stage"
 
 class AnimateCameraToCenter {
 
@@ -19,7 +19,7 @@ class AnimateCameraToCenter {
         this.animation_done = false
         this.animation_1_done = false
 
-        this.print = true
+        this.print = false
         if ( this.print ) {
 
             console.log ( 'AnimateCameraToCenter' )
@@ -47,7 +47,7 @@ class AnimateCameraToCenter {
         tween.to({x: position.x, y: position.y, z: position.z }, 700 )
         tween.easing(TWEEN.Easing.Quadratic.Out) 
         tween.onUpdate(() => {
-
+            //
         })
         tween.onComplete( () => {
 
@@ -82,10 +82,10 @@ class AnimateCameraToCenter {
     }
 
     //time ms from application start
-    animate( time: number = 0) {
+    animate( time = 0) {
 
         //console.log ( time )
-        if ( false ) console.log( time )
+        if ( this.print ) console.log( time )
         
         if ( this.animation_1_done && this.animation_done ) return        
         const animate = ( time: number ) => { this.animate ( time ) } 

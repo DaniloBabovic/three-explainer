@@ -1,3 +1,4 @@
+import { Material, Object3D } from 'three';
 import   { 
     AmbientLight,    
     BoxGeometry,    
@@ -14,26 +15,38 @@ import   {
 
 import  Stats               from 'three/examples/jsm/libs/stats.module.js'
 import { OrbitControls }    from 'three/examples/jsm/controls/OrbitControls.js'
+import { htmlTemplate } from '../player/html_template'
 
 export let stage = null as  ( Stage | null)
 export class Stage {
 
-    public scene:               Scene
-    public camera:              PerspectiveCamera | null
-    public controls:            OrbitControls | null
-    public renderer:            WebGLRenderer | null
-    public ambientLight:        AmbientLight | null = null
-    public floor:               Mesh | any
+    public camera:              PerspectiveCamera | null = null    
+    public controls:            OrbitControls | null = null    
+    public renderer:            WebGLRenderer | null = null    
+    public ambientLight:        AmbientLight | null = null    
     public sprite:              Sprite | null = null
-    public stats:               Stats | null 
+    public stats:               Stats | null  = null    
     public containerElement:    HTMLElement | null = null
     public cameraStartPosition  = { x: 0, y: 0, z: 170 }
     public wall:                Mesh| null = null
     public cube:                Mesh| null = null
+    public scene:               Scene  = new Scene()
 
     constructor ( protected divID: string ) {
         
-        const containerElement = document.getElementById ( divID )                
+        this.init ( )
+    }
+
+    init ( ) {
+
+        const container = document.getElementById ( this.divID )
+        if ( container ) {
+
+            container.innerHTML = htmlTemplate
+        }
+
+        const containerElement = document.getElementById ( 'threeDiv' )
+
         console.log ( 'Stage constructor', containerElement )
         
         let width = 100
@@ -43,9 +56,8 @@ export class Stage {
             this.containerElement = containerElement
             width = containerElement?.clientWidth
             height = containerElement?.clientHeight
+            //console.log ( width, height )
         }
-        //Scene
-        this.scene = new Scene()
 
         //Camera
         this.camera = new PerspectiveCamera (
@@ -125,10 +137,10 @@ export class Stage {
         this.stats.domElement.style.cssText = `position:absolute; top:0px; left:0px;`
         if ( containerElement ) {
             
-		    containerElement.appendChild( this.stats.dom )
+            containerElement.appendChild( this.stats.dom )
         }
-        this.render ( )        
-        console.log ( 'Stage success.' )
+        this.onWindowResize ( )
+        console.log ( 'Stage success...' )
     }
 
     insertWall ( ) {
@@ -147,22 +159,33 @@ export class Stage {
 
     public onWindowResize ( ) {
         
-        if ( !this.containerElement) return
-            
-        const rect = this.containerElement.getBoundingClientRect();
-        const width = rect.width
-        const height = rect.height
+        if ( !this.containerElement ) return
+        if ( ! this.renderer ) return
+        if ( ! this.renderer.domElement ) return
+
+        this.renderer.setSize ( 0, 0 )
+
+        setTimeout(() => {
         
-        if ( this.renderer ) {
+            if ( !this.containerElement ) return
+            if ( ! this.renderer ) return
+            if ( ! this.renderer.domElement ) return
 
-            this.renderer.setSize ( width, height )
-        }
-        if ( this.camera ) {
-
-            this.camera.aspect = width / height
-            this.camera.updateProjectionMatrix()
-        }
-        this.render()    
+            const rect = this.containerElement.getBoundingClientRect();
+            const width = rect.width
+            const height = rect.height
+            
+            if ( this.renderer ) {
+    
+                this.renderer.setSize ( width, height )
+            }
+            if ( this.camera ) {
+    
+                this.camera.aspect = width / height
+                this.camera.updateProjectionMatrix()
+            }
+            this.render()    
+        }, 10)
     }
 
     render() {
@@ -199,29 +222,36 @@ export class Stage {
             this.ambientLight = null
         }        
 
-        const  clearThree = ( obj: any ) => {
-            
-            while ( obj.children.length > 0 ) { 
+        const  clearThree = ( obj: Object3D | Mesh ) => {
+                    
+            if ( obj instanceof Mesh ) {
 
-                clearThree ( obj.children [ 0 ] )
-                obj.remove ( obj.children [ 0 ] )
+                if ( obj.geometry ) obj.geometry.dispose ( )
+              
+                if ( obj.material ) { 
+                    //in case of map, bumpMap, normalMap, envMap ...
+                    Object.keys ( obj.material ).forEach ( prop => {
+    
+                        const mat =  obj.material as any
+                        if ( !mat[ prop ] ) return         
+                        if (    mat[prop] !== null &&  typeof mat[prop].dispose === 'function' )  {
+    
+                            mat[ prop ].dispose ( )
+                        }
+
+                    })
+                    const material = obj.material as Material
+                    material.dispose()
+                }
             }
-            if ( obj.geometry ) obj.geometry.dispose ( )
-          
-            if ( obj.material ) { 
-                //in case of map, bumpMap, normalMap, envMap ...
-                Object.keys ( obj.material ).forEach ( prop => {
+            if ( obj instanceof Object3D ) {
 
-                    if ( !obj.material[ prop ] ) return         
-                    if (    obj.material[prop] !== null && 
-                            typeof obj.material[prop].dispose === 'function' )  {
-
-                        obj.material[ prop ].dispose ( )
-                    }
-
-                })
-                obj.material.dispose()
-            }
+                while ( obj.children.length > 0 ) { 
+    
+                    clearThree ( obj.children [ 0 ] )
+                    obj.remove ( obj.children [ 0 ] )
+                }
+            } 
         }   
         if ( this.stats ) {
 

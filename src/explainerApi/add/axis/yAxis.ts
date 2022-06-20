@@ -1,8 +1,10 @@
-import { AxisOptions, Direction, Origin } from "../../model"
-import { Font } from 'three/examples/jsm/loaders/FontLoader.js'
+import { Direction, Origin } from "../../model"
+import type { AxisOptions } from "../../model"
+import  type { Font } from 'three/examples/jsm/loaders/FontLoader.js'
 import { ConvexGeometry } from 'three/examples/jsm/geometries/ConvexGeometry.js';
 //import { ConvexGeometry } from '../../convex.js';
 
+import type { MeshPhongMaterialParameters } from "three"
 import { 
 
     CatmullRomCurve3,
@@ -11,7 +13,6 @@ import {
     DoubleSide,
     Mesh,
     MeshPhongMaterial, 
-    MeshPhongMaterialParameters, 
     Object3D, 
     ShapeGeometry, 
     TubeGeometry, 
@@ -19,7 +20,7 @@ import {
 
 } from "three"
 
-import { Axis } from "./axis"
+import type { Axis } from "./axis"
 
 class YAxis {
 
@@ -391,7 +392,7 @@ class YAxis {
             if ( this.yMesh ) {
 
                 this.rootGroup.remove( this.yMesh )
-                let material: any = this.yMesh.material
+                const material: any = this.yMesh.material
                 material.dispose ()
                 this.yMesh.geometry.dispose ()
                 this.yMesh = null
@@ -401,7 +402,7 @@ class YAxis {
                 if ( this.yArrow ) {
 
                     this.yArrowGroup.remove ( this.yArrow )
-                    let material: any = this.yArrow.material
+                    const material: any = this.yArrow.material
                     material.dispose ()
                     this.yArrow.geometry.dispose ()
                     this.yArrow = null
@@ -411,7 +412,7 @@ class YAxis {
             if ( this.textYMesh ) {
 
                 this.rootGroup.remove( this.textYMesh )
-                let material: any = this.textYMesh.material
+                const material: any = this.textYMesh.material
                 material.dispose ()
                 this.textYMesh.geometry.dispose ()
                 this.textYMesh = null
@@ -422,7 +423,7 @@ class YAxis {
 
                     this.periodLines.forEach( line => {
                         this.periodGroup.remove ( line )
-                        let material: any = line.material
+                        const material: any = line.material
                         material.dispose ()
                         line.geometry.dispose ()
                     })
@@ -432,7 +433,7 @@ class YAxis {
 
                     this.periodTexts.forEach( text => {
                         this.periodGroup.remove ( text )
-                        let material: any = text.material
+                        const material: any = text.material
                         material.dispose ()
                         text.geometry.dispose ()
                     })

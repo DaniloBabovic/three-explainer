@@ -1,7 +1,10 @@
-import { AxisOptions, Direction, Origin } from "../../model"
-import { Font } from 'three/examples/jsm/loaders/FontLoader.js'
+import { Direction, Origin } from "../../model"
+import type { AxisOptions } from "../../model"
+import type { Font } from 'three/examples/jsm/loaders/FontLoader.js'
 import { ConvexGeometry } from 'three/examples/jsm/geometries/ConvexGeometry.js';
 //import { ConvexGeometry } from '../../convex.js';
+
+import type { MeshPhongMaterialParameters } from "three"
 
 import { 
 
@@ -10,8 +13,7 @@ import {
     ConeGeometry, 
     DoubleSide,
     Mesh, 
-    MeshPhongMaterial, 
-    MeshPhongMaterialParameters, 
+    MeshPhongMaterial,     
     Object3D, 
     ShapeGeometry, 
     SphereGeometry, 
@@ -20,7 +22,7 @@ import {
 
 } from "three"
 
-import { Axis } from "./axis"
+import type { Axis } from "./axis"
 
 class XAxis {
 
@@ -56,7 +58,7 @@ class XAxis {
     public periodGroup:         Object3D    = new Object3D ( )
     public xArrowGroup:         Object3D    = new Object3D ( )
     public rootGroup:           Object3D    = new Object3D ( )
-    public showO:               boolean     = false
+    public showO     = false
 
     constructor ( 
         axis:       Axis, 
@@ -272,7 +274,7 @@ class XAxis {
         if ( this.axis.yAxisOptions?.from ) {
             yFrom = this.axis.yAxisOptions?.from
         }
-        let center = this.axis.origin == Origin.CENTER
+        const center = this.axis.origin == Origin.CENTER
         let text      = `(${xFrom}, ${yFrom})`
         if ( center ) {
 
@@ -392,10 +394,10 @@ class XAxis {
             this.periodGroup.add ( textMesh )
         }
 
-        let count = (this.options.to - this.options.from) / this.options.period
+        const count = (this.options.to - this.options.from) / this.options.period
         //count = Math.round ( count )
         const width = this.size
-        let space = width / count
+        const space = width / count
         //space = Math.round ( space)
         
         if ( this.origin == Origin.CENTER ) {
@@ -469,7 +471,7 @@ class XAxis {
 
             if ( this.sphere ) {
                 this.rootGroup.remove( this.sphere )
-                let material: any = this.sphere.material
+                const material: any = this.sphere.material
                 material.dispose ()
                 this.sphere.geometry.dispose ()
                 this.sphere = null
@@ -477,7 +479,7 @@ class XAxis {
             if ( this.xMesh ) {
 
                 this.rootGroup.remove( this.xMesh )
-                let material: any = this.xMesh.material
+                const material: any = this.xMesh.material
                 material.dispose ()
                 this.xMesh.geometry.dispose ()
                 this.xMesh = null
@@ -487,7 +489,7 @@ class XAxis {
                 if ( this.xArrow ) {
 
                     this.xArrowGroup.remove ( this.xArrow )
-                    let material: any = this.xArrow.material
+                    const material: any = this.xArrow.material
                     material.dispose ()
                     this.xArrow.geometry.dispose ()
                     this.xArrow = null
@@ -497,7 +499,7 @@ class XAxis {
             if ( this.textXMesh ) {
 
                 this.rootGroup.remove( this.textXMesh )
-                let material: any = this.textXMesh.material
+                const material: any = this.textXMesh.material
                 material.dispose ()
                 this.textXMesh.geometry.dispose ()
                 this.textXMesh = null
@@ -505,7 +507,7 @@ class XAxis {
             if ( this.textOMesh ) {
 
                 this.rootGroup.remove( this.textOMesh )
-                let material: any = this.textOMesh.material
+                const material: any = this.textOMesh.material
                 material.dispose ()
                 this.textOMesh.geometry.dispose ()
                 this.textOMesh = null
@@ -516,7 +518,7 @@ class XAxis {
 
                     this.periodLines.forEach( line => {
                         this.periodGroup.remove ( line )
-                        let material: any = line.material
+                        const material: any = line.material
                         material.dispose ()
                         line.geometry.dispose ()
                     })
@@ -526,7 +528,7 @@ class XAxis {
 
                     this.periodTexts.forEach( text => {
                         this.periodGroup.remove ( text )
-                        let material: any = text.material
+                        const material: any = text.material
                         material.dispose ()
                         text.geometry.dispose ()
                     })

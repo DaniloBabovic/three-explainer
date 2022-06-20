@@ -1,6 +1,7 @@
-import { AxisOptions, Direction, Origin }   from "../model"
-import { Explainer }                        from "../explainer"
-import { Vector2, Vector3 }                 from "three"
+import { Direction, Origin }  from "../model"
+import type { AxisOptions }  from "../model"
+import type { Explainer }                       from "../explainer"
+import { Vector2, Vector3 }                     from "three"
 
 class Coordinate {
 

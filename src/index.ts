@@ -1,5 +1,8 @@
 import { createExplainer, Explainer } from "./explainerApi/explainer"
-import Animate from "./explainerApi/animate/animate"
+import type Animate from "./explainerApi/animate/animate"
+import { styleInject } from "./inject_css";
+
+styleInject (  )
 
 export const sum = (a: number, b: number):number|string => {
 

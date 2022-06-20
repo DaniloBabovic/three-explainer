@@ -1,12 +1,7 @@
 import TWEEN, { now }                           from "@tweenjs/tween.js"
-import { TimeNode, StartTimeModel }             from "../model"
-import { Explainer }                            from "../explainer"
-//import { setDefaultValue, setMarks, setValue }  from "store/player/playerSlice"
-//import { setMax, setMin, setStep }              from "store/player/playerSlice"
-import { setDefaultValue, setMarks, setValue }  from "../player/player"
-import { setMax, setMin, setStep }              from "../player/player"
-//import { store }                                from "store/store"
-import Animate                                  from "./animate"
+import type { TimeNode, StartTimeModel }             from "../model"
+import type { Explainer }                            from "../explainer"
+import type Animate                                  from "./animate"
 
 class AnimateManager {
 
@@ -26,13 +21,19 @@ class AnimateManager {
     public allAnimations: Animate []        = []
 
     public lastProgress: Animate | null     = null
-    public lastProgressPercent: number      = 0
+    public lastProgressPercent      = 0
 
     //Tween
     public pause                            = false
     
     constructor( protected exp: Explainer ) {
-        
+
+        const onSlider = ( newVal: number, oldVal: number ) => {
+
+            oldVal
+            this.onSlider ( newVal)
+        }
+        exp.player.onValue = onSlider
     }
 
     // Danger! recursion
@@ -97,7 +98,7 @@ class AnimateManager {
 
     public onEnd ( animation: Animate ) {
 
-        for( var i = 0; i < this.activeAnimations.length; i++){ 
+        for( let i = 0; i < this.activeAnimations.length; i++){ 
     
             const current = this.activeAnimations [ i ]
             if ( current.id === animation.id ) { 
@@ -111,8 +112,7 @@ class AnimateManager {
 
         this.lastProgress = animation
         this.lastProgressPercent = percent
-        //console.log ( animation.id, percent )
-
+        //console.log ( animation.id, percent )         
         if ( animation.timeNode ) {
 
             const duration = ( animation.timeNode.end - animation.timeNode.start ) * percent
@@ -126,7 +126,7 @@ class AnimateManager {
             durationAll = Math.round ( durationAll * 100 )/100
             //console.log ( durationAll )
             //store.dispatch ( setValue ( durationAll * 1000 ) )
-            setValue ( durationAll * 1000 )
+            this.exp.player.setValue ( durationAll * 1000 )
         }
     }
 
@@ -272,7 +272,10 @@ class AnimateManager {
 
     public updatePlayer ( ) {
 
-        const marks = []
+        const marks: {
+            value: number
+            label: string
+        }[] = []
         for (let i = 0; i < this.startTimes.length; i++) {
 
             const startTime = this.startTimes [ i ]
@@ -296,12 +299,12 @@ class AnimateManager {
         // store.dispatch ( setValue ( 0 ) )
         // store.dispatch ( setMarks ( marks ) )
 
-        setMin ( 0 )
-        setMax ( this.timeNode.end * 1000 )
-        setStep ( 1 )
-        setDefaultValue ( 0 )
-        setValue ( 0 )
-        setMarks ( marks )
+        this.exp.player.setMin ( 0 )
+        this.exp.player.setMax ( this.timeNode.end * 1000 )
+        this.exp.player.setStep ( 1 )
+        this.exp.player.setDefaultValue ( 0 )
+        this.exp.player.setValue ( 0 )
+        this.exp.player.setMarks ( marks )
 
 
         const onAllDone = ( ) => {
@@ -310,7 +313,7 @@ class AnimateManager {
             const toStart = ( ) => {
 
                 //store.dispatch ( setValue ( 0 ) )
-                setValue ( 0 )
+                this.exp.player.setValue ( 0 )
                 console.log( 'TWEEN.getAll().length=', TWEEN.getAll().length )                 
             }
             setTimeout ( toStart, 200 )
@@ -323,7 +326,7 @@ class AnimateManager {
         }
     }
 
-    animate( time: number = 0) {
+    animate( time = 0) {
 
          //console.log ( time )        
         if ( this.done ) return

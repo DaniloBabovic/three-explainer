@@ -1,7 +1,8 @@
-import { Explainer } from "../../explainer"
-import { Font } from 'three/examples/jsm/loaders/FontLoader.js'
+import type { Explainer } from "../../explainer"
+import type { Font } from 'three/examples/jsm/loaders/FontLoader.js'
 
-import { AxisOptions, defaultOptions, Origin } from "../../model"
+import { defaultOptions, Origin } from "../../model"
+import type { AxisOptions } from "../../model"
 import XAxis from "./xAxis"
 import YAxis from "./yAxis"
 
@@ -76,6 +77,7 @@ export class Axis {
 
         console.log ( 'create X and Y axis.' )
 
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         const self = this
         
         const font = this.exp.font

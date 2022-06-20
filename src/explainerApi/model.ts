@@ -1,4 +1,4 @@
-import Animate from "./animate/animate"
+import type Animate from "./animate/animate"
 
 export enum Origin {
 

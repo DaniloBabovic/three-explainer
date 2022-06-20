@@ -1,6 +1,8 @@
-import { Explainer } from "../explainer"
-import { Camera, Intersection, Object3D, Raycaster, Scene, Vector2, Event, Vector3 } from "three"
-import { Stage } from "./stage"
+import type { Explainer } from "../explainer"
+import { Camera, Object3D, Raycaster, Scene, Vector2, Vector3 } from "three"
+import type { Intersection } from "three"
+import type { Event } from "three"
+import type { Stage } from "./stage"
 
 class Pick {
 
@@ -11,8 +13,8 @@ class Pick {
     protected scene: Scene
     protected pointer = new Vector2 ( )
     protected raycaster = new Raycaster ( )
-    protected pMove: (evt: any) => void
-    protected pClick: (evt: any) => void
+    protected pMove: (evt:  MouseEvent ) => void
+    protected pClick: (evt:  MouseEvent ) => void
     protected container: HTMLElement | null
     protected INTERSECTED: Intersection<Object3D<Event>>[] | null = null
     protected mouseWorldPosition = new Vector3 ()
@@ -86,6 +88,7 @@ class Pick {
         //console.log ( 'click', this.INTERSECTED )       
         if ( this.INTERSECTED && this.INTERSECTED.length > 0 ) {
             const intersection = this.INTERSECTED [0]
+            // eslint-disable-next-line no-constant-condition
             if (false ) console.log ( 'intersection', intersection.point.x, intersection.point.y, event )
         }
     }

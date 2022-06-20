@@ -1,5 +1,5 @@
 import { exp }                  from "../explainer"
-import {  LineSegments }        from "three"
+import type { LineSegments }        from "three"
 import TWEEN, { Tween, now }    from "@tweenjs/tween.js"
 
 let testDrawRange : TestDrawRange | null = null
@@ -49,7 +49,7 @@ class TestDrawRange {
                 line.geometry.attributes.position.needsUpdate = true            
             }
         })
-        this.tween.yoyo ( true ) 
+        this.tween.yoyo ( true )
         this.tween.repeat(2)
         this.tween.start ( )
         this.animate ()

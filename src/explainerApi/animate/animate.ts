@@ -1,12 +1,12 @@
 import TWEEN, { Tween, now }        from "@tweenjs/tween.js"
-import { TimeNode }                 from "../model"
-import { Explainer }                from "../explainer"
+import type { TimeNode }                 from "../model"
+import type { Explainer }                from "../explainer"
 
 import { Line, Material }           from "three"
 import { Mesh, Vector3 }            from "three"
 import { Object3D, Vector2 }        from "three"
-import { Stage }                    from "../scene/stage"
-import AnimateManager               from "./animateManager"
+import type { Stage }                    from "../scene/stage"
+import type AnimateManager               from "./animateManager"
 
 class Animate {
 
@@ -14,6 +14,7 @@ class Animate {
     protected   done:           boolean
    
     protected   print:          boolean
+    // eslint-disable-next-line @typescript-eslint/ban-types
     public      callbacks:      Function[] = []
     public      idParent        = -1
     public      timeNode:       TimeNode | null = null
