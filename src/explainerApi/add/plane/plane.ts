@@ -1,13 +1,13 @@
-import { Explainer } from "../../explainer";
-import { 
-    DoubleSide, 
-    Mesh, 
-    MeshStandardMaterial, 
-    PlaneGeometry, 
-    Vector2, 
-    Vector3 
+import type { Explainer } from "../../explainer";
+import {
+    DoubleSide,
+    Mesh,
+    MeshStandardMaterial,
+    PlaneGeometry,
+    Vector2,
+    Vector3
 } from "three"
-/* 
+/*
 data = {
     color: material.color.getHex(),
     emissive: material.emissive.getHex(),
@@ -15,7 +15,7 @@ data = {
     map: diffuseMapKeys[ 0 ],
     roughnessMap: roughnessMapKeys[ 0 ],
     alphaMap: alphaMapKeys[ 0 ]
-} 
+}
 */
 class Plane {
 
@@ -26,7 +26,7 @@ class Plane {
         transparent:        true,
         opacity:            1,
 
-        color:              0xFF0000,        
+        color:              0xFF0000,
         emissive:           0xffd144,
         emissiveIntensity:  0.7,
         roughness:          0.5,
@@ -43,13 +43,13 @@ class Plane {
     public size:     number
     public plane:     Mesh | null = null
 
-    constructor ( 
+    constructor (
 
-        exp: Explainer, 
-        size: number, 
-        color: number, 
-        emissive: number, 
-        position: [ number, number, number ] 
+        exp: Explainer,
+        size: number,
+        color: number,
+        emissive: number,
+        position: [ number, number, number ]
     ) {
 
         this.exp = exp
@@ -57,7 +57,7 @@ class Plane {
         this.paramMaterial.color = color
         this.paramMaterial.emissive = emissive
 
-        const pos = exp.coordinate.mathWayToWorldTo (
+        const pos = exp.coordinate.userToWorldPosition (
 
             new Vector2 ( position[0], position[1] ),
             position[2]
@@ -82,16 +82,16 @@ class Plane {
         const geometry = new PlaneGeometry ( size, size )
         const material = new MeshStandardMaterial(this.paramMaterial)
         this.plane = new Mesh(geometry, material)
-        this.plane.position.set ( 
-            this.position.x,  
+        this.plane.position.set (
+            this.position.x,
             this.position.y,
             this.position.z
         )
     }
-    
+
     insert ( ) {
 
-        if ( this.plane ) {            
+        if ( this.plane ) {
             this.exp.stage.scene.add ( this.plane )
         }
     }

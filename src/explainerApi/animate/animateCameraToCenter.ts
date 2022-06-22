@@ -43,9 +43,9 @@ class AnimateCameraToCenter {
         this.animate ( )
         // Move camera
         const position = this.stage.cameraStartPosition
-        const tween = new TWEEN.Tween ( this.stage.camera.position ) 
+        const tween = new TWEEN.Tween ( this.stage.camera.position )
         tween.to({x: position.x, y: position.y, z: position.z }, 700 )
-        tween.easing(TWEEN.Easing.Quadratic.Out) 
+        tween.easing(TWEEN.Easing.Quadratic.Out)
         tween.onUpdate(() => {
             //
         })
@@ -57,15 +57,15 @@ class AnimateCameraToCenter {
 
         // LookAt camera
         this.stage.controls.update ()
-        const target = new Vector3 ( 
+        const target = new Vector3 (
 
             this.stage.controls.target.x,
             this.stage.controls.target.y,
             this.stage.controls.target.z
         )
-        const tween1 = new TWEEN.Tween ( target ) 
+        const tween1 = new TWEEN.Tween ( target )
         tween1.to({x: position.x, y: position.y, z: 0 }, 700 )
-        tween1.easing(TWEEN.Easing.Quadratic.Out) 
+        tween1.easing(TWEEN.Easing.Quadratic.Out)
         tween1.onUpdate(() => {
 
             if ( this.stage.controls ) {
@@ -86,9 +86,9 @@ class AnimateCameraToCenter {
 
         //console.log ( time )
         if ( this.print ) console.log( time )
-        
-        if ( this.animation_1_done && this.animation_done ) return        
-        const animate = ( time: number ) => { this.animate ( time ) } 
+
+        if ( this.animation_1_done && this.animation_done ) return
+        const animate = ( time: number ) => { this.animate ( time ) }
 
         requestAnimationFrame ( animate )
 

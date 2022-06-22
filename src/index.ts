@@ -1,8 +1,5 @@
 import { createExplainer, Explainer } from "./explainerApi/explainer"
 import type Animate from "./explainerApi/animate/animate"
-import { styleInject } from "./inject_css";
-
-styleInject (  )
 
 export const sum = (a: number, b: number):number|string => {
 
@@ -21,8 +18,8 @@ if ('development' === process.env.NODE_ENV) {
     console.log('production mode');
 }
 
-export const hi = ( name: string ): string => {  
-  
+export const hi = ( name: string ): string => {
+
 	return `Hi ${name}`
 };
 
@@ -38,7 +35,7 @@ export enum Origin {
 }
 
 export enum AxisName { X, Y, Z }
-export enum Direction { 
+export enum Direction {
     LEFT_RIGHT,
     RIGHT_LEFT,
     TOP_BOTTOM,
@@ -84,7 +81,7 @@ export interface StartTimeModel  {
     from: number
     infos: {
         id: number
-        to: number 
+        to: number
         name: string
     }[]
 }

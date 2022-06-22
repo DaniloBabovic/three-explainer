@@ -1,15 +1,15 @@
 import { Material, Object3D } from 'three';
-import   { 
-    AmbientLight,    
-    BoxGeometry,    
-    DirectionalLight,    
+import   {
+    AmbientLight,
+    BoxGeometry,
+    DirectionalLight,
     DoubleSide,
-    Mesh, 
-    MeshBasicMaterial, 
+    Mesh,
+    MeshBasicMaterial,
     MOUSE,
-    PerspectiveCamera, 
-    PlaneGeometry, 
-    Scene, 
+    PerspectiveCamera,
+    PlaneGeometry,
+    Scene,
     Sprite,
     WebGLRenderer }         from 'three'
 
@@ -20,20 +20,21 @@ import { htmlTemplate } from '../player/html_template'
 export let stage = null as  ( Stage | null)
 export class Stage {
 
-    public camera:              PerspectiveCamera | null = null    
-    public controls:            OrbitControls | null = null    
-    public renderer:            WebGLRenderer | null = null    
-    public ambientLight:        AmbientLight | null = null    
+    public camera:              PerspectiveCamera | null = null
+    public controls:            OrbitControls | null = null
+    public renderer:            WebGLRenderer | null = null
+    public ambientLight:        AmbientLight | null = null
     public sprite:              Sprite | null = null
-    public stats:               Stats | null  = null    
+    public stats:               Stats | null  = null
     public containerElement:    HTMLElement | null = null
     public cameraStartPosition  = { x: 0, y: 0, z: 170 }
     public wall:                Mesh| null = null
     public cube:                Mesh| null = null
     public scene:               Scene  = new Scene()
+    public skipOrbitRender      = false
 
     constructor ( protected divID: string ) {
-        
+
         this.init ( )
     }
 
@@ -48,7 +49,7 @@ export class Stage {
         const containerElement = document.getElementById ( 'threeDiv' )
 
         console.log ( 'Stage constructor', containerElement )
-        
+
         let width = 100
         let height = 100
 
@@ -62,13 +63,13 @@ export class Stage {
         //Camera
         this.camera = new PerspectiveCamera (
 
-            75, 
-            width / height, 
-            0.1, 
+            75,
+            width / height,
+            0.1,
             10000
         )
         console.log ( 'hi, width, height of container =', width, height )
-        
+
         this.camera.position.x = this.cameraStartPosition.x
         this.camera.position.y = this.cameraStartPosition.y
         this.camera.position.z = this.cameraStartPosition.z
@@ -80,10 +81,10 @@ export class Stage {
 
             alpha: true,
             antialias: true
-          
+
         })
-        this.renderer.setSize( width, height )        
-        this.renderer.setClearColor ( '#000000', 1 )        
+        this.renderer.setSize( width, height )
+        this.renderer.setClearColor ( '#000000', 1 )
         this.renderer.setPixelRatio(window.devicePixelRatio)
         //this.renderer.autoClear = false;
 
@@ -93,7 +94,7 @@ export class Stage {
             containerElement.appendChild ( this.renderer.domElement )
         }
         //const oneRem = parseInt(getComputedStyle(document.documentElement).fontSize)
-        
+
         this.controls = new OrbitControls ( this.camera, this.renderer.domElement)
         //this.controls = createOrbit  ( this.camera, this.renderer.domElement)
         //this.controls = new MapControls( this.camera, this.renderer.domElement );
@@ -103,14 +104,22 @@ export class Stage {
             RIGHT: MOUSE.ROTATE
         }
         const onChange = ( ) => {
-            this.render ()
+
+            if ( this.skipOrbitRender ) {
+
+                this.skipOrbitRender = false
+                
+            } else {
+
+                this.render ()
+            }
         }
         this.controls.addEventListener( 'change', onChange );
 
         //Cube
         const addCube = false
         if ( addCube ) {
-            
+
             const size = 3
             const geometry = new BoxGeometry( size, size, size)
             const material = new MeshBasicMaterial({
@@ -121,12 +130,12 @@ export class Stage {
             this.cube.position.set ( 0, 0, 10 )
             this.scene.add ( this.cube )
         }
-        this.insertWall ( ) 
+        this.insertWall ( )
 
-        //Resize        
-        const onResize = () => { this.onWindowResize ( ) }        
-        window.addEventListener('resize', onResize, false) 
-        
+        //Resize
+        const onResize = () => { this.onWindowResize ( ) }
+        window.addEventListener('resize', onResize, false)
+
 
         //Light
         this.addLight ( )
@@ -136,7 +145,7 @@ export class Stage {
         this.stats = Stats()
         this.stats.domElement.style.cssText = `position:absolute; top:0px; left:0px;`
         if ( containerElement ) {
-            
+
             containerElement.appendChild( this.stats.dom )
         }
         this.onWindowResize ( )
@@ -147,7 +156,7 @@ export class Stage {
 
         const geometry = new PlaneGeometry( 400, 400 );
         const material = new MeshBasicMaterial( {
-            color: 0x444444, 
+            color: 0x444444,
             side: DoubleSide,
             transparent: true,
             opacity: 0
@@ -158,7 +167,7 @@ export class Stage {
     }
 
     public onWindowResize ( ) {
-        
+
         if ( !this.containerElement ) return
         if ( ! this.renderer ) return
         if ( ! this.renderer.domElement ) return
@@ -166,7 +175,7 @@ export class Stage {
         this.renderer.setSize ( 0, 0 )
 
         setTimeout(() => {
-        
+
             if ( !this.containerElement ) return
             if ( ! this.renderer ) return
             if ( ! this.renderer.domElement ) return
@@ -174,17 +183,17 @@ export class Stage {
             const rect = this.containerElement.getBoundingClientRect();
             const width = rect.width
             const height = rect.height
-            
+
             if ( this.renderer ) {
-    
+
                 this.renderer.setSize ( width, height )
             }
             if ( this.camera ) {
-    
+
                 this.camera.aspect = width / height
                 this.camera.updateProjectionMatrix()
             }
-            this.render()    
+            this.render()
         }, 10)
     }
 
@@ -193,13 +202,13 @@ export class Stage {
         if ( this.scene == null ) return
         if ( this.camera == null ) return
         if ( this.renderer == null ) return
-                
+
         this.renderer.render ( this.scene, this.camera )
         if ( this.stats ) this.stats.update()
     }
 
     addLight ( ) {
-        
+
         this.ambientLight = new AmbientLight( 0x888888 )
         this.scene?.add( this.ambientLight )
         const dirLight = new DirectionalLight( 0xffffff );
@@ -210,7 +219,7 @@ export class Stage {
     public free ( ) {
 
         console.log ( 'free' )
-        
+
         if ( this.controls ) {
 
             this.controls.dispose ( )
@@ -220,22 +229,22 @@ export class Stage {
 
             this.scene.remove( this.ambientLight )
             this.ambientLight = null
-        }        
+        }
 
         const  clearThree = ( obj: Object3D | Mesh ) => {
-                    
+
             if ( obj instanceof Mesh ) {
 
                 if ( obj.geometry ) obj.geometry.dispose ( )
-              
-                if ( obj.material ) { 
+
+                if ( obj.material ) {
                     //in case of map, bumpMap, normalMap, envMap ...
                     Object.keys ( obj.material ).forEach ( prop => {
-    
+
                         const mat =  obj.material as any
-                        if ( !mat[ prop ] ) return         
+                        if ( !mat[ prop ] ) return
                         if (    mat[prop] !== null &&  typeof mat[prop].dispose === 'function' )  {
-    
+
                             mat[ prop ].dispose ( )
                         }
 
@@ -246,24 +255,24 @@ export class Stage {
             }
             if ( obj instanceof Object3D ) {
 
-                while ( obj.children.length > 0 ) { 
-    
+                while ( obj.children.length > 0 ) {
+
                     clearThree ( obj.children [ 0 ] )
                     obj.remove ( obj.children [ 0 ] )
                 }
-            } 
-        }   
+            }
+        }
         if ( this.stats ) {
 
             this.stats.domElement.innerHTML = ''
             this.stats = null
         }
-        //window.removeEventListener( 'resize', this.onResize ) 
+        //window.removeEventListener( 'resize', this.onResize )
         clearThree( this.scene)
         if ( this.containerElement ) {
 
             while ( this.containerElement.firstChild ) {
-    
+
                 this.containerElement.removeChild ( this.containerElement.firstChild )
             }
             this.containerElement.innerHTML = ''
@@ -271,7 +280,7 @@ export class Stage {
 
         this.camera = null
         this.renderer = null
-        
+
         stage = null
     }
 }

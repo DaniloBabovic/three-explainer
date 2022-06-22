@@ -78,7 +78,7 @@ const example_1 = ( log = false ) => {
     // Animate
     const a1 = exp.fade      ( 'xAxis',        2, 0, exp.xGroup,        { x: -10, y: 0, z: 0 }, { x: 0, y: 0, z: 0 },   { from: 0, to: 1 } )
     const a2 = exp.fadeAfter ( 'YAxis',    a1, 1, 0, exp.yGroup,        { x: 0, y: -10, z: 0 }, { x: 0, y: 0, z: 0 },   { from: 0, to: 1 } )
-    const a3 = exp.fadeAfter ( 'Plane',    a2, 2, 0, plane.plane,      { x: 6, y: 6, z: 0 },   { x: 4, y: 5, z: 1 },   { from: 0, to: 1 } )
+    const a3 = exp.fadeAfter ( 'Plane',    a2, 10, 0, plane.plane,      { x: 60, y: 6, z: 0 },   { x: 4, y: 5, z: 1 },   { from: 0, to: 1 } )
     const a4 = exp.fadeAfter ( 'Text',     a2, 1, 0, text3D.textMesh,  { x: 6, y: -6, z: 0 },  { x: 4, y: -4.5, z: 0 },{ from: 0, to: 1 } )
     const a5 = exp.fadeAfter ( 'Sphere',   a4, 1, 0, sphere.sphereMesh,{ x: -6, y: -6, z: 0 }, { x: -4, y: -4, z: 8 }, { from: 0, to: 1 } )
     const a6 = exp.fadeAfter ( 'Cube',     a4, 1, 0, cube.cube,        { x: -6, y: 6, z: 0 },  { x: -4, y: 5, z: 4 },  { from: 0, to: 1 } )
@@ -88,7 +88,7 @@ const example_1 = ( log = false ) => {
 
     if ( log  ) console.log( a3, a5, a9 )
 
-    exp.animateManager.updatePlayer ( )
+    //exp.animateManager.updatePlayer ( )
 
     exp.stage.render ( )
 }
@@ -98,7 +98,7 @@ export const testCoordinate = ( ) => {
     if ( !exp ) return
 
     const v         = new Vector2 ( 0, -50 )
-    const position  = exp.coordinate.mathWayToWorldTo ( v, 0 )
+    const position  = exp.coordinate.userToWorldPosition ( v, 0 )
 
     console.log ( 'testCoordinate', position )
 

@@ -1,13 +1,13 @@
-import { Explainer } from "../../explainer";
+import type { Explainer } from "../../explainer";
 import {
-    DoubleSide, 
-    Mesh, 
-    MeshStandardMaterial, 
-    SphereGeometry, 
-    Vector2, 
-    Vector3 
+    DoubleSide,
+    Mesh,
+    MeshStandardMaterial,
+    SphereGeometry,
+    Vector2,
+    Vector3
 } from "three"
-/* 
+/*
 data = {
     color: material.color.getHex(),
     emissive: material.emissive.getHex(),
@@ -15,7 +15,7 @@ data = {
     map: diffuseMapKeys[ 0 ],
     roughnessMap: roughnessMapKeys[ 0 ],
     alphaMap: alphaMapKeys[ 0 ]
-} 
+}
 */
 class Sphere {
 
@@ -26,7 +26,7 @@ class Sphere {
         transparent:        true,
         opacity:            1,
 
-        color:              0xFF0000,        
+        color:              0xFF0000,
         emissive:           0x00FFFF,
         emissiveIntensity:  1,
         roughness:          1,
@@ -39,19 +39,19 @@ class Sphere {
         wireframe:          false
     }
     public widthSegments    = 32
-    public heightSegments   = 16 
+    public heightSegments   = 16
 
     public position: Vector3
     public size:     number
     public sphereMesh:     Mesh | null = null
 
-    constructor ( 
+    constructor (
 
-        exp: Explainer, 
-        size: number, 
-        color: number, 
-        emissive: number, 
-        position: [ number, number, number ] 
+        exp: Explainer,
+        size: number,
+        color: number,
+        emissive: number,
+        position: [ number, number, number ]
     ) {
 
         this.exp = exp
@@ -59,7 +59,7 @@ class Sphere {
         this.paramMaterial.color = color
         this.paramMaterial.emissive = emissive
 
-        const pos = exp.coordinate.mathWayToWorldTo (
+        const pos = exp.coordinate.userToWorldPosition (
 
             new Vector2 ( position[0], position[1] ),
             position[2]
@@ -72,7 +72,7 @@ class Sphere {
             this.position = new Vector3 ()
         }
         //console.log ( 'sphere position', this.position.x, this.position.y )
-        
+
     }
 
     material ( params: Record<string, unknown> ) {
@@ -83,20 +83,20 @@ class Sphere {
     create ( ) {
 
         const size = this.size
-        const geometry = new SphereGeometry ( 
-            size, 
-            this.widthSegments, 
-            this.heightSegments 
+        const geometry = new SphereGeometry (
+            size,
+            this.widthSegments,
+            this.heightSegments
         )
         const material = new MeshStandardMaterial(this.paramMaterial)
         this.sphereMesh = new Mesh(geometry, material)
-        this.sphereMesh.position.set ( 
-            this.position.x,  
+        this.sphereMesh.position.set (
+            this.position.x,
             this.position.y,
             this.position.z
         )
     }
-    
+
     insert ( ) {
 
         if ( this.sphereMesh ) {

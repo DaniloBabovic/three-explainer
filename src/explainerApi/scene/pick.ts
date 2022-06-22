@@ -49,10 +49,10 @@ class Pick {
             this.pointer.x = ( ( event.offsetX  ) / this.container.offsetWidth ) * 2 - 1
             this.pointer.y = - ( ( event.offsetY) / this.container.offsetHeight ) * 2 + 1
             if ( this.print ) {
-                
+
                 console.log ( this.pointer.x, this.pointer.y )
             }
-            this.testPick ( ) 
+            this.testPick ( )
         }
     }
 
@@ -68,10 +68,10 @@ class Pick {
 
                 const wall = this.raycaster.intersectObjects ( [this.stage.wall] )
                 return wall
-            }            
+            }
             return []
         }
-        const intersects = getIntersects ( ) 
+        const intersects = getIntersects ( )
         if ( intersects.length > 0 ) {
             this.INTERSECTED = intersects
             const intersection = this.INTERSECTED [0]
@@ -85,7 +85,7 @@ class Pick {
 
     onPickClick ( event: MouseEvent ) {
 
-        //console.log ( 'click', this.INTERSECTED )       
+        //console.log ( 'click', this.INTERSECTED )
         if ( this.INTERSECTED && this.INTERSECTED.length > 0 ) {
             const intersection = this.INTERSECTED [0]
             // eslint-disable-next-line no-constant-condition

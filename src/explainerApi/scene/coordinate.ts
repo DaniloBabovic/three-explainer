@@ -6,7 +6,7 @@ import { Vector2, Vector3 }                     from "three"
 class Coordinate {
 
     protected exp: Explainer
-    
+
     protected oPosition = new Vector3 ( 0, 0, 0 )
     protected worldPosition = new Vector3 ( 0, 0, 0 )
     protected screenPosition = new Vector2 ( 0, 0 )
@@ -21,7 +21,7 @@ class Coordinate {
     public size: number // 200
 
     constructor( exp: Explainer ) {
-        
+
         this.exp = exp
         this.size = exp.add.axis.size
     }
@@ -35,11 +35,11 @@ class Coordinate {
     onWorldPosition ( v: Vector3 ) {
 
         this.worldPosition.copy ( v )
-        this.worldToMathWay ( v )
+        this.worldToUserPosition ( v )
         //console.log ( 'onWorldPosition', this.worldPosition )
     }
 
-    mathWayToWorldTo ( mathWayPosition: Vector2, z: number ) {
+    userToWorldPosition ( userPosition: Vector2, z: number ) {
 
         if ( !this.optionsX ) return
         if ( !this.optionsY ) return
@@ -52,15 +52,15 @@ class Coordinate {
             const center = (this.exp.add.axis.origin == Origin.CENTER)
             let oX = this.oPosition.x
             if ( center ) oX -= this.size/2
-                    
-            const xRange = Math.abs ( this.optionsX.to - this.optionsX.from )             
-            const percent = (mathWayPosition.x - this.optionsX.from) /xRange
+
+            const xRange = Math.abs ( this.optionsX.to - this.optionsX.from )
+            const percent = (userPosition.x - this.optionsX.from) /xRange
             worldX = oX + percent * this.size
 
         } else {
 
-            const xRange = Math.abs ( this.optionsX.to - this.optionsX.from )             
-            const percent = (mathWayPosition.x - this.optionsX.from) /xRange
+            const xRange = Math.abs ( this.optionsX.to - this.optionsX.from )
+            const percent = (userPosition.x - this.optionsX.from) /xRange
             worldX =  this.oPosition.x - percent * this.size
         }
 
@@ -69,9 +69,9 @@ class Coordinate {
             const center = (this.exp.add.axis.origin == Origin.CENTER)
             let oY = this.oPosition.y
             if ( center ) oY -= this.size/2
-                    
-            const yRange = Math.abs ( this.optionsY.to - this.optionsY.from )             
-            const percent = (mathWayPosition.y - this.optionsY.from) /yRange
+
+            const yRange = Math.abs ( this.optionsY.to - this.optionsY.from )
+            const percent = (userPosition.y - this.optionsY.from) /yRange
             worldY = oY - percent * this.size
 
         } else {
@@ -79,9 +79,9 @@ class Coordinate {
             const center = (this.exp.add.axis.origin == Origin.CENTER)
             let oY = this.oPosition.y
             if ( center ) oY -= this.size/2
-                    
-            const yRange = Math.abs ( this.optionsY.to - this.optionsY.from )             
-            const percent = (mathWayPosition.y - this.optionsY.from) /yRange
+
+            const yRange = Math.abs ( this.optionsY.to - this.optionsY.from )
+            const percent = (userPosition.y - this.optionsY.from) /yRange
             worldY = oY + percent * this.size
         }
 
@@ -94,7 +94,7 @@ class Coordinate {
         return result
     }
 
-    worldToMathWay ( worldPosition: Vector3 ) {
+    worldToUserPosition ( worldPosition: Vector3 ) {
 
         if ( !this.optionsX ) return
         if ( !this.optionsY ) return
@@ -106,16 +106,16 @@ class Coordinate {
             const center = this.exp.add.axis.origin == Origin.CENTER
             let oX = this.oPosition.x
             if ( center ) oX -= this.size/2
-            
-            const xRange = Math.abs ( this.optionsX.to - this.optionsX.from ) 
+
+            const xRange = Math.abs ( this.optionsX.to - this.optionsX.from )
             const worldXSize = worldPosition.x - oX
             const percent = worldXSize/this.size
             mathWayX = xRange * percent + this.optionsX.from
             //console.log ( mathWayX )
-            
+
         } else {
 
-            const xRange = Math.abs ( this.optionsX.to - this.optionsX.from ) 
+            const xRange = Math.abs ( this.optionsX.to - this.optionsX.from )
             const worldXSize = this.oPosition.x - worldPosition.x
             const percent = worldXSize/this.size
             mathWayX = xRange * percent + this.optionsX.from
@@ -123,26 +123,26 @@ class Coordinate {
         }
         if ( this.yDirection == Direction.TOP_BOTTOM ) {
 
-            const yRange = Math.abs ( this.optionsY.to - this.optionsY.from ) 
+            const yRange = Math.abs ( this.optionsY.to - this.optionsY.from )
             const worldYSize = worldPosition.y - this.oPosition.y
             const percent = worldYSize/this.size
             mathWayY = this.optionsY.from - yRange * percent
             //console.log ( mathWayY )
-            
+
         } else {
 
             let oY = this.oPosition.y
             if ( this.exp.add.axis.origin == Origin.CENTER ) {
                 oY -= this.size/2
             }
-            const yRange = Math.abs ( this.optionsY.to - this.optionsY.from ) 
+            const yRange = Math.abs ( this.optionsY.to - this.optionsY.from )
             const worldYSize = worldPosition.y - oY
             const percent = worldYSize/this.size
             mathWayY = this.optionsY.from + yRange * percent
             //console.log ( mathWayY )
         }
         //console.log ( Math.round ( mathWayX * 100 )/100, Math.round ( mathWayY * 100 )/100 )
-        
+
         return new Vector2 ( mathWayX, mathWayY )
     }
 

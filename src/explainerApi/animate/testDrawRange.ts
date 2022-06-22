@@ -11,7 +11,7 @@ class TestDrawRange {
     done                                    = false
 
     constructor( ) {
-        
+
         console.log ( 'TestDrawRange' )
         if ( exp?.add.lines && exp?.add.lines.length > 0 ) {
 
@@ -29,15 +29,15 @@ class TestDrawRange {
         const lineLength = line.geometry.attributes.position.count
         if ( lineLength ) {
 
-            line.geometry.setDrawRange( 0, lineLength * 0.5 )            
-            line.geometry.attributes.position.needsUpdate = true            
+            line.geometry.setDrawRange( 0, lineLength * 0.5 )
+            line.geometry.attributes.position.needsUpdate = true
         }
-        console.log ( lineLength, line.geometry.getIndex () )        
+        console.log ( lineLength, line.geometry.getIndex () )
     }
 
     insertAnimation ( line: LineSegments ) {
 
-        this.tween = new TWEEN.Tween ( this.current ) 
+        this.tween = new TWEEN.Tween ( this.current )
         this.tween.to ( { percent: 1 }, 2000 )
 
         this.tween.onUpdate(() => {
@@ -45,8 +45,8 @@ class TestDrawRange {
             const lineLength = line.geometry.attributes.position.count
             if ( lineLength ) {
 
-                line.geometry.setDrawRange( 0, lineLength * this.current.percent ) 
-                line.geometry.attributes.position.needsUpdate = true            
+                line.geometry.setDrawRange( 0, lineLength * this.current.percent )
+                line.geometry.attributes.position.needsUpdate = true
             }
         })
         this.tween.yoyo ( true )
@@ -65,7 +65,7 @@ class TestDrawRange {
         if ( time == 0 ) time = now()
         if ( this.done ) return
 
-        const animate = ( time: number ) => { this.animate ( time ) }         
+        const animate = ( time: number ) => { this.animate ( time ) }
         requestAnimationFrame ( animate )
 
         TWEEN.update (  )

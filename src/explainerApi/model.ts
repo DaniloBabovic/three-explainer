@@ -1,4 +1,7 @@
-import type Animate from "./animate/animate"
+import type { Vector3 }         from 'three';
+import type Animate             from "./animate/animate"
+import type AnimateCameraPos    from "./animate/animateCameraPosition"
+import type AnimateCameraTar    from "./animate/animateCameraTarget"
 
 export enum Origin {
 
@@ -11,7 +14,7 @@ export enum Origin {
 
 export enum AxisName { X, Y, Z }
 
-export enum Direction { 
+export enum Direction {
     LEFT_RIGHT,
     RIGHT_LEFT,
     TOP_BOTTOM,
@@ -44,8 +47,8 @@ export const defaultOptions = {
 
 export interface TimeNode  {
 
-    animation:  Animate |null
-    parent:     Animate |null
+    animation:  AnimeNull
+    parent:     AnimeNull
     id:         number
     start:      number
     end:        number
@@ -57,7 +60,11 @@ export interface StartTimeModel  {
     from: number
     infos: {
         id: number
-        to: number 
+        to: number
         name: string
     }[]
 }
+
+export type AnimeNull = Animate | AnimateCameraPos | AnimateCameraTar | null
+export type Anime = Animate | AnimateCameraPos | AnimateCameraTar
+export type Target = Vector3 | { x: number, y: number, z: number,  }

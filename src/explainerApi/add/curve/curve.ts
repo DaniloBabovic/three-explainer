@@ -1,12 +1,15 @@
-import { Explainer } from "../../explainer";
-import { 
+import type { Explainer } from "../../explainer";
+
+import {
+
     CatmullRomCurve3,
-    DoubleSide, 
-    Mesh, 
+    DoubleSide,
+    Mesh,
     MeshStandardMaterial,
     TubeBufferGeometry,
-    Vector2, 
-    Vector3 
+    Vector2,
+    Vector3
+
 } from "three"
 
 class Curve {
@@ -18,7 +21,7 @@ class Curve {
         transparent:        true,
         opacity:            1,
 
-        color:              0xFF0000,        
+        color:              0xFF0000,
         emissive:           0xffd144,
         emissiveIntensity:  0.7,
         roughness:          0.5,
@@ -36,20 +39,20 @@ class Curve {
     public points:      Vector3[] = []
     public curvePath:   CatmullRomCurve3 | null = null
 
-    constructor ( 
+    constructor (
 
-        exp: Explainer, 
-        points: [ number, number, number ][],
-        size: number, 
-        color: number, 
-        emissive: number,         
+        exp:        Explainer,
+        points:     [ number, number, number ][],
+        size:       number,
+        color:      number,
+        emissive:   number,
     ) {
 
         for (let i = 0; i < points.length; i++) {
 
             const p = points[i]
             //const point = new Vector3 ( p [ 0 ], p[ 1 ], p[ 2 ] )
-            const pos = exp.coordinate.mathWayToWorldTo (
+            const pos = exp.coordinate.userToWorldPosition (
 
                 new Vector2 ( p[0], p[1] ),
                 p[2]
@@ -58,10 +61,10 @@ class Curve {
 
                 this.points.push ( pos )
             }
-            
+
         }
         //console.log ( 'points', this.points )
-        
+
         this.exp = exp
         this.size = size
         this.paramMaterial.color = color
@@ -77,32 +80,25 @@ class Curve {
 
         //const size = this.size
         this.curvePath = new CatmullRomCurve3( this.points )
-        
-        /* 
+
+        /*
         for (let i = 1; i < 100; i++) {
             const percent = i/100
             const point = this.curvePath.getPointAt ( percent )
-            //console.log ( point.x, point.y )                        
-        } 
+            //console.log ( point.x, point.y )
+        }
         */
-        const geometry = new TubeBufferGeometry ( 
+        const geometry = new TubeBufferGeometry (
             this.curvePath,
             this.points.length*15,
-            this.size/5,//radius 
-            16, 
-            false 
+            this.size/5,//radius
+            16,
+            false
         )
         const material = new MeshStandardMaterial(this.paramMaterial)
-        this.curve = new Mesh(geometry, material)        
-        /* const curveLength = geometry.index?.array.length
-        if ( curveLength ) {
-
-            geometry.drawRange.start = curveLength * 0.4
-            geometry.drawRange.count = curveLength * 0.1
-        }
-        console.log ( curveLength )         */
+        this.curve = new Mesh(geometry, material)
     }
-    
+
     insert ( ) {
 
         if ( this.curve ) {

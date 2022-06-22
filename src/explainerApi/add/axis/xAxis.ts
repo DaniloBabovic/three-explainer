@@ -1,10 +1,10 @@
-import { Direction, Origin } from "../../model"
-import type { AxisOptions } from "../../model"
-import type { Font } from 'three/examples/jsm/loaders/FontLoader.js'
-import { ConvexGeometry } from 'three/examples/jsm/geometries/ConvexGeometry.js';
-//import { ConvexGeometry } from '../../convex.js';
-
 import type { MeshPhongMaterialParameters } from "three"
+import type { Font }                        from 'three/examples/jsm/loaders/FontLoader.js'
+import type { AxisOptions }                 from "../../model"
+
+import { Direction, Origin }                from "../../model"
+import { ConvexGeometry }                   from 'three/examples/jsm/geometries/ConvexGeometry.js';
+import { Material }                         from "three"
 
 import { 
 
@@ -192,7 +192,7 @@ class XAxis {
                    
             case Origin.TOP_RIGHT:
             
-                this.position.set ( off, off, 0 )
+                this.position.set   ( off, off, 0 )
                 this.startPoint.set ( off, off, 0 )
                 this.endPoint.set   ( -off, off, 0 )
                 this.direction      = Direction.RIGHT_LEFT
@@ -210,18 +210,18 @@ class XAxis {
 
             case Origin.BOTTOM_LEFT:
         
-                this.position.set ( -off, -off, 0 )
+                this.position.set   ( -off, -off, 0 )
                 this.startPoint.set ( -off, -off, 0 )
                 this.endPoint.set   ( off, -off, 0 )
                 this.direction      = Direction.LEFT_RIGHT
                 xGeometry.translate ( off, 0, 0 )
 
                 //Cone
-                meshCone.position.set   ( point1.x, point1.y, point1.z )
-                meshCone.lookAt         ( point2 )
-                meshCone.rotateX        ( Math.PI / 2 )
-                geometryCone.translate  ( 0, point2.x, 0 )
-                this.xArrowGroup.position.set  ( this.sizeHalf, this.position.y, this.position.z )
+                meshCone.position.set           ( point1.x, point1.y, point1.z )
+                meshCone.lookAt                 ( point2 )
+                meshCone.rotateX                ( Math.PI / 2 )
+                geometryCone.translate          ( 0, point2.x, 0 )
+                this.xArrowGroup.position.set   ( this.sizeHalf, this.position.y, this.position.z )
                 // Text
                 this.textXPosition.set ( this.sizeHalf, this.position.y + ( fontSize ), this.position.z )
                 this.textOPosition.set ( -this.sizeHalf, this.position.y - ( fontSize * 2.5), this.position.z )
@@ -275,7 +275,7 @@ class XAxis {
             yFrom = this.axis.yAxisOptions?.from
         }
         const center = this.axis.origin == Origin.CENTER
-        let text      = `(${xFrom}, ${yFrom})`
+        let text     = `(${xFrom}, ${yFrom})`
         if ( center ) {
 
             let XO = (this.options.to - this.options.from)
@@ -368,7 +368,7 @@ class XAxis {
             const xSize = this.options.periodSize / 16            
 
             const front = 0
-            const points = []            
+            const points: Vector3 [] = []            
             points.push( new Vector3( -xSize + x, 0, front ) )
             points.push( new Vector3( xSize + x, 0, front ) )
             points.push( new Vector3( x+xSize, side * periodSize, front ) )
@@ -471,16 +471,16 @@ class XAxis {
 
             if ( this.sphere ) {
                 this.rootGroup.remove( this.sphere )
-                const material: any = this.sphere.material
-                material.dispose ()
+                const material = this.sphere.material
+                if ( material instanceof Material ) material.dispose ()
                 this.sphere.geometry.dispose ()
                 this.sphere = null
             }
             if ( this.xMesh ) {
 
                 this.rootGroup.remove( this.xMesh )
-                const material: any = this.xMesh.material
-                material.dispose ()
+                const material = this.xMesh.material
+                if ( material instanceof Material ) material.dispose ()
                 this.xMesh.geometry.dispose ()
                 this.xMesh = null
             }
@@ -489,8 +489,8 @@ class XAxis {
                 if ( this.xArrow ) {
 
                     this.xArrowGroup.remove ( this.xArrow )
-                    const material: any = this.xArrow.material
-                    material.dispose ()
+                    const material = this.xArrow.material
+                    if ( material instanceof Material ) material.dispose ()
                     this.xArrow.geometry.dispose ()
                     this.xArrow = null
                 }
@@ -499,16 +499,16 @@ class XAxis {
             if ( this.textXMesh ) {
 
                 this.rootGroup.remove( this.textXMesh )
-                const material: any = this.textXMesh.material
-                material.dispose ()
+                const material = this.textXMesh.material
+                if ( material instanceof Material ) material.dispose ()
                 this.textXMesh.geometry.dispose ()
                 this.textXMesh = null
             }
             if ( this.textOMesh ) {
 
                 this.rootGroup.remove( this.textOMesh )
-                const material: any = this.textOMesh.material
-                material.dispose ()
+                const material = this.textOMesh.material
+                if ( material instanceof Material ) material.dispose ()
                 this.textOMesh.geometry.dispose ()
                 this.textOMesh = null
             }
@@ -518,8 +518,8 @@ class XAxis {
 
                     this.periodLines.forEach( line => {
                         this.periodGroup.remove ( line )
-                        const material: any = line.material
-                        material.dispose ()
+                        const material = line.material
+                        if ( material instanceof Material ) material.dispose ()
                         line.geometry.dispose ()
                     })
                     this.periodLines.length = 0
@@ -528,8 +528,8 @@ class XAxis {
 
                     this.periodTexts.forEach( text => {
                         this.periodGroup.remove ( text )
-                        const material: any = text.material
-                        material.dispose ()
+                        const material = text.material
+                        if ( material instanceof Material ) material.dispose ()
                         text.geometry.dispose ()
                     })
                     this.periodTexts.length = 0

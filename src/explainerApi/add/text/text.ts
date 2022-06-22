@@ -1,11 +1,11 @@
-import { Explainer } from "../../explainer"
-import { 
-    DoubleSide, 
-    Mesh, 
-    MeshStandardMaterial, 
+import type { Explainer } from "../../explainer"
+import {
+    DoubleSide,
+    Mesh,
+    MeshStandardMaterial,
     ShapeGeometry,
-    Vector2, 
-    Vector3 
+    Vector2,
+    Vector3
 } from "three"
 
 class Text {
@@ -17,7 +17,7 @@ class Text {
         transparent:        true,
         opacity:            1,
 
-        color:              0xFF0000,        
+        color:              0xFF0000,
         emissive:           0xffd144,
         emissiveIntensity:  0.7,
         roughness:          0.5,
@@ -30,21 +30,21 @@ class Text {
         wireframe:          false
     }
     public widthSegments    = 32
-    public heightSegments   = 16 
+    public heightSegments   = 16
 
     public position: Vector3
     public size:     number
     public textMesh:     Mesh | null = null
     public text: string
 
-    constructor ( 
+    constructor (
 
-        exp: Explainer, 
+        exp: Explainer,
         text: string,
-        size: number, 
-        color: number, 
-        emissive: number, 
-        position: [ number, number, number ] 
+        size: number,
+        color: number,
+        emissive: number,
+        position: [ number, number, number ]
     ) {
 
         this.exp = exp
@@ -53,7 +53,7 @@ class Text {
         this.paramMaterial.color = color
         this.paramMaterial.emissive = emissive
 
-        const pos = exp.coordinate.mathWayToWorldTo (
+        const pos = exp.coordinate.userToWorldPosition (
 
             new Vector2 ( position[0], position[1] ),
             position[2]
@@ -80,24 +80,24 @@ class Text {
 
         geometry.computeBoundingBox()
         let xMid = 0
-        let factor = -0.5
+        const factor = -0.5
         if ( geometry && geometry.boundingBox ) {
 
-            xMid = factor * ( 
-                geometry.boundingBox.max.x - 
-                geometry.boundingBox.min.x 
+            xMid = factor * (
+                geometry.boundingBox.max.x -
+                geometry.boundingBox.min.x
             )
         }
         geometry.translate( xMid, 0, 0 )
 
         this.textMesh = new Mesh( geometry, material )
-        this.textMesh.position.set ( 
-            this.position.x, 
-            this.position.y, 
+        this.textMesh.position.set (
+            this.position.x,
+            this.position.y,
             this.position.z
         )
     }
-    
+
     insert ( ) {
 
         if ( this.textMesh ) {

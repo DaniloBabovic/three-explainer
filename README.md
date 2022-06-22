@@ -4,7 +4,7 @@
 
 # Explainer - JavaScript 3D library
 
-The aim of the project is to create an easy to use, lightweight, cross-browser, general purpose 3D library for product and science explanations. 
+The aim of the project is to create an easy to use, lightweight, cross-browser, general purpose 3D animation library for product and science explanations. 
 
 ## Documentation ##
 

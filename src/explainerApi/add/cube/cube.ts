@@ -1,6 +1,13 @@
-import { Explainer } from "../../explainer";
-import { BoxGeometry, DoubleSide, Mesh, MeshStandardMaterial, Vector2, Vector3 } from "three";
-/* 
+import type { Explainer } from "../../explainer"
+import {
+    BoxGeometry,
+    DoubleSide,
+    Mesh,
+    MeshStandardMaterial,
+    Vector2,
+    Vector3
+} from "three"
+/*
 data = {
     color: material.color.getHex(),
     emissive: material.emissive.getHex(),
@@ -8,7 +15,7 @@ data = {
     map: diffuseMapKeys[ 0 ],
     roughnessMap: roughnessMapKeys[ 0 ],
     alphaMap: alphaMapKeys[ 0 ]
-} 
+}
 */
 class Cube {
 
@@ -19,7 +26,7 @@ class Cube {
         transparent:        true,
         opacity:            1,
 
-        color:              0xFF0000,        
+        color:              0xFF0000,
         emissive:           0xffd144,
         emissiveIntensity:  0.7,
         roughness:          0.5,
@@ -36,13 +43,13 @@ class Cube {
     public size:     number
     public cube:     Mesh | null = null
 
-    constructor ( 
+    constructor (
 
-        exp: Explainer, 
-        size: number, 
-        color: number, 
-        emissive: number, 
-        position: [ number, number, number ] 
+        exp: Explainer,
+        size: number,
+        color: number,
+        emissive: number,
+        position: [ number, number, number ]
     ) {
 
         this.exp = exp
@@ -50,7 +57,7 @@ class Cube {
         this.paramMaterial.color = color
         this.paramMaterial.emissive = emissive
 
-        const pos = exp.coordinate.mathWayToWorldTo (
+        const pos = exp.coordinate.userToWorldPosition (
 
             new Vector2 ( position[0], position[1] ),
             position[2]
@@ -75,13 +82,14 @@ class Cube {
         const geometry = new BoxGeometry ( size, size, size)
         const material = new MeshStandardMaterial(this.paramMaterial)
         this.cube = new Mesh(geometry, material)
-        this.cube.position.set ( 
-            this.position.x,  
+        this.cube.position.set (
+
+            this.position.x,
             this.position.y,
             this.position.z
         )
     }
-    
+
     insert ( ) {
 
         if ( this.cube ) {
