@@ -11,22 +11,24 @@ The aim of the project is to create **SIMPLE** 3D JS animation engine for produc
 
 ## Main features
 
-- SIMPLE
+## SIMPLE  
 One line of code for objects creation and chain animations.
 
+## Axis
 - X, Y, Z Axis with 5 origin points  
 Automatic coordinate transformation from user to browser to Three.js coordinate system  
 
+## 3D objects
 - Line, Curve, Text, Plane, Cube, Sphere object creation
 
-- Animations: 
+## Animations: 
 1. fade-in chain animation
 2. fade-out chain animation 
 3. Object position chain animation
 4. Camera position chain animation 
 5. Camera target chain animation 
 
-- Player:
+## Player:
 1. Video-like pause-stop controls
 2. Slier component controls all animations
 3. Markers auto creation 
@@ -37,7 +39,7 @@ Currently npm is required to build the project.
 
 ```bash
 
-	npm i @mapalchemy/explainer
+npm i @mapalchemy/explainer
 
 ```
 
@@ -54,6 +56,9 @@ This is example what you can animate with only 100 lines of code:
 ## React install ##
 
 Coming soon
+
+![Next.js application](https://github.com/DaniloBabovic/three-explainer/blob/main/next.png)
+
 
 [npm]: https://img.shields.io/npm/v/@mapalchemy/explainer
 [npm-url]: https://www.npmjs.com/package/@mapalchemy/explainer

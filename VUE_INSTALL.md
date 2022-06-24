@@ -263,4 +263,4 @@ Open TheWelcome.vue in your code editor and overwrite TheWelcome.vue:
 ```
 If everything went well, you should see this:
 
-![Next.js application](https://github.com/DaniloBabovic/three-explainer/blob/main/explainer-vue.png)
+![Vue.js application](https://github.com/DaniloBabovic/three-explainer/blob/main/explainer-vue.png)
