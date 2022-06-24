@@ -20,15 +20,11 @@ Open TheWelcome.vue in your code editor and overwrite TheWelcome.vue:
 
 ```javascript
 <script setup>
+	import { Vector3 } 								from 'three'
+	import { onMounted } 							from 'vue'
+	import { useExplainer, Origin, defaultOptions } from '@mapalchemy/explainer'
 
-	import { Vector3 } from 'three';
-	import { onMounted } from 'vue'
-	import { useExplainer, Origin } from '@mapalchemy/explainer'
-
-	onMounted(() => {
-		
-		insertExplainer ()
-	})
+	onMounted(() => {  insertExplainer () })
 
 	const insertExplainer = ( ) => {
 
@@ -36,30 +32,26 @@ Open TheWelcome.vue in your code editor and overwrite TheWelcome.vue:
 		const exp = useExplainer ( 'three_container' )
 		exp.add.axis.setOrigin ( Origin.CENTER )
 
-		// Axis X Options
-		const axisOptX = {
-			from: -5, to: 5,    period: 1,      periodSize: 8,
-			color: '#888888',   thickness: 2,   fontSize: 4
-		}
-		exp.add.axis.addXAxis ( axisOptX )
+		// Axis X Options    
+		exp.add.axis.addXAxis ( { ...defaultOptions, from: -5, to: 5 } )
 
 		// Axis Y Options
-		const axisOptY = { 
-			from: -5, to: 5,    period: 1,      periodSize: 8,
-			color: '#448888',   thickness: 2,   fontSize: 4
-		}
-		exp.add.axis.addYAxis ( axisOptY )
+		exp.add.axis.addYAxis ( { ...defaultOptions, from: -5, to: 5 } )
+
+		// Axis Z Options
+		exp.add.axis.addZAxis ( { ...defaultOptions, from: -2, to: 2, period: 0.5, visible: false } )
+
 		exp.add.axis.create ()
 
 		//Plane
-		const plane = exp.add.plane ( 10, 0x000000, 0x99FFFF, [ 4, 5, 1 ] )    
+		const plane = exp.add.plane ( 10, 0x000000, 0x99FFFF, [ 4, 5, 0 ] )    
 
 		//Cube
-		const cube = exp.add.cube ( 7, 0x00FF00, 0xffd144, [ -4, 5, 4 ] )
+		const cube = exp.add.cube ( 7, 0x00FF00, 0xffd144, [ -4, 5, 0 ] )
 		cube.paramMaterial.roughness = 0.8
 
 		//Sphere
-		const sphere = exp.add.sphere ( 8, 0x888888, 0x00FFFF, [ -4, -4, 8 ] )
+		const sphere = exp.add.sphere ( 8, 0x888888, 0x00FFFF, [ -4, -4, 0 ] )
 		sphere.heightSegments = 64; sphere.widthSegments = 64
 		sphere.paramMaterial.emissiveIntensity = 0.1    
 
@@ -72,17 +64,16 @@ Open TheWelcome.vue in your code editor and overwrite TheWelcome.vue:
 
 		function getSinPoints ( size, count, from, to ) {
 			
-			const pointsSin  			= []
+			const pointsSin				= []
 			const range                 = to - from; 
 			const step                  = range/count
 			let current                 = from
 
 			for (let i = 1; i < count; i++) {
-
 				current     += step            
 				const rad   = size * current * 10 * ( Math.PI / 180 ) - size
 				const v     = new Vector3 ( current, 2 * Math.sin ( rad ), 0  )
-				const v1    = new Vector3 ( v.x, 2.2 * v.y, -50 )
+				const v1    = new Vector3 ( v.x, 2.2 * v.y, -1 )
 
 				pointsSin.push  ( v );  pointsLine.push ( v )
 				pointsLine.push ( v1 ); pointsSin2.push ( v1 )
@@ -100,20 +91,32 @@ Open TheWelcome.vue in your code editor and overwrite TheWelcome.vue:
 		exp.add.insert ()
 
 		// Animate 
-		const a1 = exp.fade      ( 'xAxis',        2, 0, exp.xGroup,        { x: -10, y: 0, z: 0 }, { x: 0, y: 0, z: 0 },   { from: 0, to: 1 } )
-		const a2 = exp.fadeAfter ( 'yAxis',    a1, 1, 0, exp.yGroup,        { x: 0, y: -10, z: 0 }, { x: 0, y: 0, z: 0 },   { from: 0, to: 1 } )
-		const a3 = exp.fadeAfter ( 'Plane',    a2, 2, 0, plane.plane,      { x: 6, y: 6, z: 0 },   { x: 4, y: 5, z: 1 },   { from: 0, to: 1 } )
-		const a4 = exp.fadeAfter ( 'Text',     a2, 1, 0, text3D.textMesh,  { x: 6, y: -6, z: 0 },  { x: 4, y: -4.5, z: 0 },{ from: 0, to: 1 } )
-		const a5 = exp.fadeAfter ( 'Sphere',   a4, 1, 0, sphere.sphereMesh,{ x: -6, y: -6, z: 0 }, { x: -4, y: -4, z: 8 }, { from: 0, to: 1 } )
-		const a6 = exp.fadeAfter ( 'Cube',     a4, 1, 0, cube.cube,        { x: -6, y: 6, z: 0 },  { x: -4, y: 5, z: 4 },  { from: 0, to: 1 } )
-		const a7 = exp.fadeAfter ( 'Curve',    a6, 2, 0, curveSin.curve,   { x: 0, y: 0, z: 0 },   { x: 0, y: 0, z: 0 },   { from: 0, to: 1 } )
-		const a8 = exp.fadeAfter ( 'Curve',    a7, 1, 0, curveSin2.curve,  { x: 0, y: 0, z: 0 },   { x: 0, y: 0, z: 0 },   { from: 0, to: 1 } )
-		const a9 = exp.fadeAfter ( 'Lines',    a8, 2, 0, line.line,        { x: 0, y: 0, z: 0 },   { x: 0, y: 0, z: 0 },   { from: 0, to: 1 } )
-		
-		console.log( a3, a5, a9 ) 
-		
-		exp.animateManager.updatePlayer ( )
+		if ( exp.xGroup && exp.yGroup && exp.zGroup && plane.plane && text3D.textMesh && sphere.sphereMesh && cube.cube && curveSin.curve && curveSin2.curve && line.line ) {
 
+			const c1 = exp.cameraPosition   ( 'Camera',       2, 0,                    { x: 0, y: 0, z: 4 },    { x: 8, y: 8, z: 2 },                        )
+			const a1 = exp.fade             ( 'xAxis',        2, 0, exp.xGroup,        { x: -10, y: 0, z: 0 },  { x: 0, y: 0, z: 0 },   { from: 0, to: 1 }   )    
+			
+			const a2 = exp.fadeAfter        ( 'yAxis',    a1, 1, 0, exp.yGroup,        { x: 0, y: -10, z: 0 },  { x: 0, y: 0, z: 0 },   { from: 0, to: 1 }   )
+			const a25= exp.fadeAfter        ( 'zAxis',    a1, 1, 0, exp.zGroup,        { x: 0, y: 10, z: 0 },   { x: 0, y: 0, z: 0 },   { from: 0, to: 1 }   )
+			const t1 = exp.cameraTarget     ( 'CTarget',  a1, 1, 0,                    { x: 0, y: 0, z: 0 },    { x: 4, y: 5, z: 0 },                        )
+			
+			const a3 = exp.fadeAfter        ( 'Plane',    a2, 2, 0, plane.plane,       { x: 6, y: 6, z: 0 },    { x: 4, y: 5, z: 0 },   { from: 0, to: 1 }   )
+			const a4 = exp.fadeAfter        ( 'Text',     a2, 1, 0, text3D.textMesh,   { x: 6, y: -6, z: 0 },   { x: 4, y: -4.5, z: 0 },{ from: 0, to: 1 }   )
+		
+			const a5 = exp.fadeAfter        ( 'Sphere',   a4, 1, 0, sphere.sphereMesh, { x: -6, y: -6, z: 0 },  { x: -4, y: -4, z: 0 }, { from: 0, to: 1 }   )
+			const a6 = exp.fadeAfter        ( 'Cube',     a4, 1, 0, cube.cube,         { x: -6, y: 6, z: 0 },   { x: -4, y: 5, z: 0 },  { from: 0, to: 1 }   )
+			const t2 = exp.cameraTarget     ( 'CTarget',  a4, 2, 0,                    { x: 4, y: 5, z: 0 },    { x: 0, y: 0, z: 0 },                        )
+			
+			const a7 = exp.fadeAfter        ( 'Curve',    a5, 2, 0, curveSin.curve,    { x: 0, y: 0, z: 0 },    { x: 0, y: 0, z: 0 },   { from: 0, to: 1 }   )    
+			const c2 = exp.cameraPosAfter   ( 'Camera',   a5, 2, 0,                    { x: 8, y: 8, z: 2 },    { x: 1, y: 0, z: 2 },                        )
+			
+			const a8 = exp.fadeAfter        ( 'Curve',    a7, 1, 0, curveSin2.curve,   { x: 0, y: 0, z: 0 },    { x: 0, y: 0, z: 0 },   { from: 0, to: 1 }   )
+			const a9 = exp.fadeAfter        ( 'Lines',    a8, 2, 0, line.line,         { x: 0, y: 0, z: 0 },    { x: 0, y: 0, z: 0 },   { from: 0, to: 1 }   )
+			const c3 = exp.cameraPosAfter   ( 'Camera',   c2, 2, 0,                    { x: 1, y: 0, z: 2 },    { x: 7, y: -4, z: 2 },                       )
+			
+			if ( print) console.log( a25, a3, a6, a9, c1, c2, c3, t1, t2 ) 
+		}
+		exp.animateManager.updatePlayer ( )
 		exp.stage.render ( )
 	}
 
@@ -129,7 +132,7 @@ Open TheWelcome.vue in your code editor and overwrite TheWelcome.vue:
 
 <style>
 
-	/* Bottom Player UI styling */
+	/* Here you can overwrite Bottom Player UI styling */
 
 	.explainerRootDiv {
 

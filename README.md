@@ -22,11 +22,10 @@ Automatic coordinate transformation from user to browser to Three.js coordinate 
 - Line, Curve, Text, Plane, Cube, Sphere object creation
 
 ## Animations: 
-1. fade-in chain animation
-2. fade-out chain animation 
-3. Object position chain animation
-4. Camera position chain animation 
-5. Camera target chain animation 
+1. Object position chain animation
+2. Fade-in-out chain animation
+3. Camera position chain animation 
+4. Camera target chain animation 
 
 ## Player:
 1. Video-like pause-stop controls
