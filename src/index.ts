@@ -1,5 +1,10 @@
-import { createExplainer, Explainer } from "./explainerApi/explainer"
-import type Animate from "./explainerApi/animate/animate"
+import { createExplainer, Explainer }   from "./explainerApi/explainer"
+import type { Vector3 }                 from 'three';
+import type AnimateCameraPosition       from './explainerApi/animate/animateCameraPosition';
+import type AnimateCameraPos            from "./explainerApi/animate/animateCameraPosition"
+import type AnimateCameraTarget         from './explainerApi/animate/animateCameraTarget';
+import type AnimateCameraTar            from "./explainerApi/animate/animateCameraTarget"
+import type Animate                     from "./explainerApi/animate/animate";
 
 export const sum = (a: number, b: number):number|string => {
 
@@ -35,6 +40,7 @@ export enum Origin {
 }
 
 export enum AxisName { X, Y, Z }
+
 export enum Direction {
     LEFT_RIGHT,
     RIGHT_LEFT,
@@ -48,28 +54,34 @@ export interface AxisOptions {
 
     from:           number
     to:             number
-    color:          string
-    thickness:      number
     period:         number
+    thickness:      number
     periodSize:     number
+
+    visible:        boolean
+    color:          string
+    emissive:       string
     fontSize:       number
 }
 
 export const defaultOptions = {
 
-    from:       -10,
-    to:         90,
-    color:      '#FFFFFF',
-    thickness:  3,
-    period:     10,
-    periodSize: 5,
-    fontSize:   4
+    from:       -5, 
+    to:         5,    
+    period:     1,      
+    thickness:  2,   
+    periodSize: 4,
+
+    visible:    true,
+    color:      '#AAAAAA',
+    emissive:   '#FFFFFF',   
+    fontSize:   3
 }
 
 export interface TimeNode  {
 
-    animation:  Animate |null
-    parent:     Animate |null
+    animation:  AnimeNull
+    parent:     AnimeNull
     id:         number
     start:      number
     end:        number
@@ -84,4 +96,29 @@ export interface StartTimeModel  {
         to: number
         name: string
     }[]
+}
+
+export type AnimeNull = Animate | AnimateCameraPos | AnimateCameraTar | null
+export type Anime = Animate | AnimateCameraPos | AnimateCameraTar
+export type Target = Vector3 | { x: number, y: number, z: number,  }
+
+export interface NearestCameraEvents {
+
+    distance:   number
+    isStart:    boolean
+    animation: AnimateCameraPosition
+}
+
+export interface NearestTargetEvents {
+
+    distance:   number
+    isStart:    boolean
+    animation: AnimateCameraTarget
+}
+
+export interface Nearest3DObjectEvents {
+
+    distance:   number
+    isStart:    boolean
+    animation: Animate
 }

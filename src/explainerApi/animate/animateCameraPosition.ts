@@ -1,12 +1,11 @@
-import TWEEN, { Tween, now }            from "@tweenjs/tween.js"
-import type { AnimeNull, TimeNode }     from "../model"
+import type { AnimeNull, TimeNode }     from "../../index"
 import type { Explainer }               from "../explainer"
-
 import type { Camera }                  from "three"
-import type { Vector3 }                 from "three"
-import { Vector2 }                      from "three"
+import { Vector3 }                      from "three"
 import type { Stage }                   from "../scene/stage"
 import type AnimateManager              from "./animateManager"
+
+import TWEEN, { Tween, now }            from "@tweenjs/tween.js"
 
 class AnimateCameraPosition {
 
@@ -39,7 +38,9 @@ class AnimateCameraPosition {
         protected onProgress:   ( ( progress: {percent: number} ) => void) | null = null
 
     ) {
-        console.log(id)
+
+        //console.log(id)
+
         this.done = false
         this.stage = exp.stage
         this.print = true
@@ -49,7 +50,7 @@ class AnimateCameraPosition {
 
             return
         }
-        console.log('from, to', from, to)
+        //console.log('from, to', from, to)
         this.camera = exp.stage.camera
         this.init ( )
     }
@@ -75,7 +76,7 @@ class AnimateCameraPosition {
         if ( !this.from ) return
         if ( !this.to ) return
 
-        const destinationVector = this.exp.coordinate.userToWorldPosition ( new Vector2 ( this.to.x, this.to.y ),this.to.z )
+        const destinationVector = this.exp.coordinate.userToWorldPosition ( new Vector3 ( this.to.x, this.to.y, this.to.z ) )
 
         if ( destinationVector ) {
 
@@ -85,8 +86,7 @@ class AnimateCameraPosition {
         }
         const startVector = this.exp.coordinate.userToWorldPosition (
 
-            new Vector2 ( this.from.x, this.from.y ),
-            this.from.z
+            new Vector3 ( this.from.x, this.from.y, this.from.z )
         )
 
         if ( startVector ) {

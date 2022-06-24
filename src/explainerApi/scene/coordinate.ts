@@ -1,7 +1,8 @@
-import { Direction, Origin }  from "../model"
-import type { AxisOptions }  from "../model"
-import type { Explainer }                       from "../explainer"
-import { Vector2, Vector3 }                     from "three"
+import type { AxisOptions }     from "../../index"
+import type { Explainer }       from "../explainer"
+
+import { Direction, Origin }    from "../../index"
+import { Vector2, Vector3 }     from "three"
 
 class Coordinate {
 
@@ -39,13 +40,15 @@ class Coordinate {
         //console.log ( 'onWorldPosition', this.worldPosition )
     }
 
-    userToWorldPosition ( userPosition: Vector2, z: number ) {
+    userToWorldPosition ( userPosition: Vector3 ) {
 
         if ( !this.optionsX ) return
         if ( !this.optionsY ) return
+        if ( !this.optionsZ ) return
 
         let worldX = 0
         let worldY = 0
+        let worldZ = 0
 
         if ( this.xDirection == Direction.LEFT_RIGHT ) {
 
@@ -85,10 +88,14 @@ class Coordinate {
             worldY = oY + percent * this.size
         }
 
+        const zRange = Math.abs ( this.optionsZ.to - this.optionsZ.from )
+        const percent = (userPosition.z - this.optionsZ.from) /zRange
+        worldZ = percent * this.size - this.size/2
+ 
         const result = new Vector3 ()
         result.x = worldX
         result.y = worldY
-        result.z = z
+        result.z = worldZ
 
         //console.log ( 'worldX = ', worldX, 'worldY = ', worldY )
         return result
@@ -98,9 +105,13 @@ class Coordinate {
 
         if ( !this.optionsX ) return
         if ( !this.optionsY ) return
+        if ( !this.optionsZ ) return
+        
 
-        let mathWayX = 0
-        let mathWayY = 0
+        let userX = 0
+        let userY = 0
+        let userZ = 0
+
         if ( this.xDirection == Direction.LEFT_RIGHT ) {
 
             const center = this.exp.add.axis.origin == Origin.CENTER
@@ -110,24 +121,24 @@ class Coordinate {
             const xRange = Math.abs ( this.optionsX.to - this.optionsX.from )
             const worldXSize = worldPosition.x - oX
             const percent = worldXSize/this.size
-            mathWayX = xRange * percent + this.optionsX.from
-            //console.log ( mathWayX )
+            userX = xRange * percent + this.optionsX.from
+            //console.log ( userX )
 
         } else {
 
             const xRange = Math.abs ( this.optionsX.to - this.optionsX.from )
             const worldXSize = this.oPosition.x - worldPosition.x
             const percent = worldXSize/this.size
-            mathWayX = xRange * percent + this.optionsX.from
-            //console.log ( mathWayX )
+            userX = xRange * percent + this.optionsX.from
+            //console.log ( userX )
         }
         if ( this.yDirection == Direction.TOP_BOTTOM ) {
 
             const yRange = Math.abs ( this.optionsY.to - this.optionsY.from )
             const worldYSize = worldPosition.y - this.oPosition.y
             const percent = worldYSize/this.size
-            mathWayY = this.optionsY.from - yRange * percent
-            //console.log ( mathWayY )
+            userY = this.optionsY.from - yRange * percent
+            //console.log ( userY )
 
         } else {
 
@@ -138,12 +149,17 @@ class Coordinate {
             const yRange = Math.abs ( this.optionsY.to - this.optionsY.from )
             const worldYSize = worldPosition.y - oY
             const percent = worldYSize/this.size
-            mathWayY = this.optionsY.from + yRange * percent
-            //console.log ( mathWayY )
+            userY = this.optionsY.from + yRange * percent
+            //console.log ( userY )
         }
-        //console.log ( Math.round ( mathWayX * 100 )/100, Math.round ( mathWayY * 100 )/100 )
+        //console.log ( Math.round ( userX * 100 )/100, Math.round ( userY * 100 )/100 )
 
-        return new Vector2 ( mathWayX, mathWayY )
+        const zRange = Math.abs ( this.optionsZ.to - this.optionsZ.from )
+        const worldZSize = worldPosition.z
+        const percent = worldZSize/this.size
+        userZ = zRange * percent + this.optionsZ.from
+
+        return new Vector3 ( userX, userY, userZ )
     }
 
     onScreenPosition ( x: number, y: number, ) {

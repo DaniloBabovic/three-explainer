@@ -10,8 +10,9 @@ import Pick                         from "./scene/pick"
 import { createStage, Stage }       from "./scene/stage"
 import Player                       from "./player/player"
 import AnimateCameraPos             from "./animate/animateCameraPosition"
-import type { Anime }               from "./model"
-import AnimateCameraTarget from "./animate/animateCameraTarget"
+
+import AnimateCameraTarget          from "./animate/animateCameraTarget"
+import type { Anime }               from ".."
 
 console.log ( 'Imports works' )
 
@@ -28,6 +29,8 @@ export class Explainer {
 
     public xGroup:          Object3D | null = null
     public yGroup:          Object3D | null = null
+    public zGroup:          Object3D | null = null
+    
     public animationID      = 0
     public animateManager:  AnimateManager
     public player:          Player
@@ -47,7 +50,7 @@ export class Explainer {
         name:         string,
         sec:          number,
         delay:        number,
-        target:       Mesh | Object3D | null | undefined,
+        target:       Mesh | Object3D,
         from:         { x: number, y: number, z: number },
         to:           { x: number, y: number, z: number },
         fade:         { from: number, to: number },
@@ -78,7 +81,7 @@ export class Explainer {
         animation:    Anime,
         sec:          number,
         delay:        number,
-        target:       Mesh | Object3D | null | undefined,
+        target:       Mesh | Object3D,
         from:         { x: number, y: number, z: number },
         to:           { x: number, y: number, z: number },
         fade:         { from: number, to: number },

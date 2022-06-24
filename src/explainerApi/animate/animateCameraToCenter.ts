@@ -1,7 +1,8 @@
-import TWEEN        from "@tweenjs/tween.js"
-import type { Explainer }from "../explainer"
-import { Vector3 }  from "three"
-import type { Stage }    from "../scene/stage"
+import type { Stage }       from "../scene/stage"
+import type { Explainer }   from "../explainer"
+
+import { Vector3 }          from "three"
+import TWEEN                from "@tweenjs/tween.js"
 
 class AnimateCameraToCenter {
 

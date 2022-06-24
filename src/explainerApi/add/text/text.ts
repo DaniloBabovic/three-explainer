@@ -4,7 +4,6 @@ import {
     Mesh,
     MeshStandardMaterial,
     ShapeGeometry,
-    Vector2,
     Vector3
 } from "three"
 
@@ -55,8 +54,7 @@ class Text {
 
         const pos = exp.coordinate.userToWorldPosition (
 
-            new Vector2 ( position[0], position[1] ),
-            position[2]
+            new Vector3 ( position[0], position[1], position[2] )
         )
         if ( pos ) {
 

@@ -7,7 +7,6 @@ import {
     Mesh,
     MeshStandardMaterial,
     TubeBufferGeometry,
-    Vector2,
     Vector3
 
 } from "three"
@@ -54,8 +53,7 @@ class Curve {
             //const point = new Vector3 ( p [ 0 ], p[ 1 ], p[ 2 ] )
             const pos = exp.coordinate.userToWorldPosition (
 
-                new Vector2 ( p[0], p[1] ),
-                p[2]
+                new Vector3 ( p[0], p[1], p[2] )
             )
             if ( pos ) {
 

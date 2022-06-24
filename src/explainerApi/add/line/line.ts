@@ -5,7 +5,6 @@ import {
     BufferGeometry,
     DoubleSide,
     LineBasicMaterial,
-    Vector2,
     Vector3,
     LineSegments
 
@@ -51,8 +50,7 @@ class Lines {
             const p = points[i]
             const pos = exp.coordinate.userToWorldPosition (
 
-                new Vector2 ( p[0], p[1] ),
-                p[2]
+                new Vector3 ( p[0], p[1], p[2] )
             )
             if ( pos ) {
 

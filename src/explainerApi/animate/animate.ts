@@ -1,12 +1,12 @@
-import TWEEN, { Tween, now }        from "@tweenjs/tween.js"
-import type { AnimeNull, TimeNode } from "../model"
+import type { AnimeNull, TimeNode } from "../../index"
 import type { Explainer }           from "../explainer"
-
-import { Line, Material }           from "three"
-import { Mesh, Vector3 }            from "three"
-import { Object3D, Vector2 }        from "three"
 import type { Stage }               from "../scene/stage"
 import type AnimateManager          from "./animateManager"
+
+import TWEEN, { Tween, now }        from "@tweenjs/tween.js"
+import { Line, Material }           from "three"
+import { Mesh, Vector3 }            from "three"
+import { Object3D }                 from "three"
 
 class Animate {
 
@@ -34,14 +34,15 @@ class Animate {
         public    after:        AnimeNull = null,
         public    sec:          number,
         public    delay:        number,        
-        protected target:       Mesh | Object3D | null | undefined,
+        public    target:       Mesh | Object3D,
         protected from:         { x: number, y: number, z: number },
         protected to:           { x: number, y: number, z: number },
         protected fade:         { from: number, to: number },
         protected onProgress:   ( ( progress: {percent: number} ) => void) | null = null
 
     ) {
-        console.log(id)
+        
+        //console.log(id)
 
         this.stage = exp.stage
         this.done = false
@@ -85,7 +86,7 @@ class Animate {
 
     convertPositions ( ) {
 
-        const destinationVector = this.exp.coordinate.userToWorldPosition ( new Vector2 ( this.to.x, this.to.y ),this.to.z )
+        const destinationVector = this.exp.coordinate.userToWorldPosition ( new Vector3 ( this.to.x, this.to.y, this.to.z ) )
 
         if ( destinationVector ) {
 
@@ -95,8 +96,7 @@ class Animate {
         }
         const startVector = this.exp.coordinate.userToWorldPosition (
 
-            new Vector2 ( this.from.x, this.from.y ),
-            this.from.z
+            new Vector3 ( this.from.x, this.from.y, this.from.z )
         )
 
         if ( startVector ) {

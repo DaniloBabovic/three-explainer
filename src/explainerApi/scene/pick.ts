@@ -1,8 +1,18 @@
-import type { Explainer } from "../explainer"
-import { Camera, Object3D, Raycaster, Scene, Vector2, Vector3 } from "three"
-import type { Intersection } from "three"
-import type { Event } from "three"
-import type { Stage } from "./stage"
+import type { Explainer }       from "../explainer"
+import type { Intersection }    from "three"
+import type { Event }           from "three"
+import type { Stage }           from "./stage"
+
+import { 
+
+    Camera, 
+    Object3D, 
+    Raycaster, 
+    Scene, 
+    Vector2, 
+    Vector3 
+
+} from "three"
 
 class Pick {
 

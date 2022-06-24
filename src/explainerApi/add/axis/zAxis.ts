@@ -23,7 +23,7 @@ import {
 
 import type { Axis } from "./axis"
 
-class YAxis {
+class ZAxis {
 
     protected axis:             Axis
     protected options:          AxisOptions
@@ -35,10 +35,10 @@ class YAxis {
     protected  startPoint       = new Vector3 ( )
     protected  endPoint         = new Vector3 ( )
     protected  direction        = Direction.LEFT_RIGHT
-    protected  textYPosition    = new Vector3 ( )
+    protected  textZPosition    = new Vector3 ( )
 
-    public yMesh:               Mesh        | null = null
-    public yArrow:              Mesh        | null = null
+    public zMesh:               Mesh        | null = null
+    public zArrow:              Mesh        | null = null
     public textYMesh:           Mesh        | null = null
 
     public periodLines:         Mesh[]      = []
@@ -52,7 +52,7 @@ class YAxis {
     public sizeHalf:            number
 
     public periodGroup:         Object3D    = new Object3D ( )
-    public yArrowGroup:         Object3D    = new Object3D ( )
+    public zArrowGroup:         Object3D    = new Object3D ( )
     public rootGroup:           Object3D    = new Object3D ( )
 
     constructor (
@@ -74,6 +74,7 @@ class YAxis {
         const emissive  = new Color ( this.options.emissive )
         
         this.setVisible ( this.options.visible )
+
 
         this.paramMaterial = {
             transparent : true,
@@ -99,17 +100,17 @@ class YAxis {
     public setVisible ( visible: boolean ) {
 
         this.periodGroup.visible = visible
-        this.yArrowGroup.visible = visible
+        this.zArrowGroup.visible = visible
         this.rootGroup.visible = visible
     }
 
     createGeometry ( ) {
 
-        const point1 = new Vector3 ( 0, -this.sizeHalf, 0 )
-        const point2 = new Vector3 ( 0, this.sizeHalf, 0 )
+        const point1 = new Vector3 ( 0, 0, -this.sizeHalf )
+        const point2 = new Vector3 ( 0, 0, this.sizeHalf )
         const curve = new CatmullRomCurve3( [point1, point2] )
 
-        const yGeometry = new TubeGeometry (
+        const zGeometry = new TubeGeometry (
             curve,
             this.sizeHalf * 6,
             this.options.thickness/5,//radius
@@ -128,21 +129,21 @@ class YAxis {
         const meshCone = new Mesh( geometryCone, this.material )
 
         this.setPositions (
-            yGeometry,
+            zGeometry,
             meshCone,
             point1, point2
         )
 
-        this.insert ( yGeometry, meshCone )
+        this.insert ( zGeometry, meshCone )
 
-        this.insertText ( 'y', this.fontSize, this.textYPosition )
+        this.insertText ( 'Z', this.fontSize, this.textZPosition )
         this.insertPeriods ( )
         this.axis.exp.stage.scene.add ( this.rootGroup )
     }
 
     setPositions (
 
-        yGeometry:  TubeGeometry,
+        zGeometry:  TubeGeometry,
         meshCone:   Mesh,
         point1:     Vector3,
         point2:     Vector3
@@ -158,88 +159,88 @@ class YAxis {
             case Origin.CENTER:
 
                 this.position.set   ( 0, 0, 0 )
-                this.startPoint.set ( 0, -off, 0 )
-                this.endPoint.set   ( 0, off, 0 )
+                this.startPoint.set ( 0, 0, -off )
+                this.endPoint.set   ( 0, 0, off )
                 this.direction      = Direction.BOTTOM_TOP
-                yGeometry.translate ( 0, 0, 0 )
+                zGeometry.translate ( 0, 0, 0 )
                 //Cone
                 meshCone.position.set   ( point1.x, point1.y, point1.z )
                 meshCone.lookAt         ( point2 )
                 meshCone.rotateX        ( Math.PI / 2 )
-                geometryCone.translate  ( 0, 0, point2.x )
-                this.yArrowGroup.position.set  ( this.position.x, this.size, this.position.z )
+                geometryCone.translate  ( point2.x, 0, 0 )
+                this.zArrowGroup.position.set  ( this.position.x, this.position.y, this.size )
                 // Text
-                this.textYPosition.set ( this.position.x  - ( fontSize  ), this.sizeHalf,  this.position.z )
+                this.textZPosition.set ( this.position.x, this.position.y  - 2 * ( fontSize  ), this.sizeHalf )
                 break
 
             case Origin.TOP_LEFT:
 
                 this.position.set   ( -off, off, 0 )
-                this.startPoint.set ( -off, off, 0 )
-                this.endPoint.set   ( -off, -off, 0 )
+                this.startPoint.set ( -off, off, -off )
+                this.endPoint.set   ( -off, -off, off )
                 this.direction      = Direction.TOP_BOTTOM
-                yGeometry.translate ( 0, -off, 0 )
+                zGeometry.translate ( 0, 0, 0 )
                 //Cone
-                meshCone.position.set   ( point2.x, point2.y, point2.z )
-                meshCone.lookAt         ( point1 )
+                meshCone.position.set   ( point1.x, point1.y, point1.z )
+                meshCone.lookAt         ( point2 )
                 meshCone.rotateX        ( Math.PI / 2 )
                 geometryCone.translate  ( 0, point2.x, 0 )
-                this.yArrowGroup.position.set  ( -off, -this.size, this.position.z )
+                this.zArrowGroup.position.set  ( this.position.x, off, this.size )
                 // Text
-                this.textYPosition.set ( -off + fontSize, -off, this.position.z )
+                this.textZPosition.set ( this.position.x, off + 2 * fontSize, off )
                 break
 
             case Origin.TOP_RIGHT:
 
                 this.position.set   ( off, off, 0 )
-                this.startPoint.set ( off, off, 0 )
-                this.endPoint.set   ( off, -off, 0 )
+                this.startPoint.set ( off, off, -off )
+                this.endPoint.set   ( off, -off, off )
                 this.direction      = Direction.TOP_BOTTOM
-                yGeometry.translate ( 0, -off, 0 )
+                zGeometry.translate ( 0, 0, 0 )
                 //Cone
-                meshCone.position.set           ( point2.x, point2.y, point2.z )
-                meshCone.lookAt                 ( point1 )
+                meshCone.position.set           ( point1.x, point1.y, point1.z )
+                meshCone.lookAt                 ( point2 )
                 meshCone.rotateX                ( Math.PI / 2 )
                 geometryCone.translate          ( 0, point1.x, 0 )
-                this.yArrowGroup.position.set   ( off, -this.size, this.position.z )
+                this.zArrowGroup.position.set   ( this.position.x, off, this.size )
                 // Text
-                this.textYPosition.set ( off - fontSize, -off, this.position.z )
+                this.textZPosition.set ( this.position.x, off + fontSize, off )
                 break
 
             case Origin.BOTTOM_LEFT:
 
                 this.position.set   ( 0, 0, 0 )
-                this.startPoint.set ( -off, -off, 0 )
-                this.endPoint.set   ( -off, -off, 0 )
+                this.startPoint.set ( -off, -off, -off )
+                this.endPoint.set   ( -off, -off, off )
                 this.direction      = Direction.BOTTOM_TOP
-                yGeometry.translate ( -off, 0, 0 )
+                zGeometry.translate ( -off, -off, 0 )
 
                 //Cone
                 meshCone.position.set           ( point1.x, point1.y, point1.z )
                 meshCone.lookAt                 ( point2 )
                 meshCone.rotateX                ( Math.PI / 2 )
                 geometryCone.translate          ( 0, point2.x, 0 )
-                this.yArrowGroup.position.set   ( -this.sizeHalf, this.size, this.position.z )
+                this.zArrowGroup.position.set   ( -off, -this.sizeHalf, this.size )
                 // Text
-                this.textYPosition.set ( -this.sizeHalf + ( fontSize ), this.sizeHalf , this.position.z )
+                this.textZPosition.set ( -off, -this.sizeHalf + ( fontSize ), this.sizeHalf )
                 break
 
             case Origin.BOTTOM_RIGHT:
 
                 this.position.set   ( off, -off, 0 )
-                this.startPoint.set ( off, -off, 0 )
-                this.endPoint.set   ( off, off, 0 )
+                this.startPoint.set ( off, -off, -off )
+                this.endPoint.set   ( off, off, off )
                 this.direction      = Direction.BOTTOM_TOP
-                yGeometry.translate ( 0, off, 0 )
+                zGeometry.translate ( 0, 0, 0 )
 
                 //Cone
                 meshCone.position.set   ( point1.x, point1.y, point1.z )
                 meshCone.lookAt         ( point2 )
                 meshCone.rotateX        ( Math.PI / 2 )
                 geometryCone.translate  ( 0, point2.x, 0 )
-                this.yArrowGroup.position.set  ( this.sizeHalf, this.size, this.position.z )
+                this.zArrowGroup.position.set  ( this.position.x, -off, this.size )
                 // Text
-                this.textYPosition.set ( this.sizeHalf - fontSize, off, this.position.z )
+                this.textZPosition.set ( this.position.x, -this.sizeHalf + fontSize, off )
                 break
 
             default:
@@ -252,15 +253,15 @@ class YAxis {
         // X Axis Tube
         const yMaterial = new MeshPhongMaterial ( this.paramMaterial )
         //const yMaterial = new MeshBasicMaterial ( {color: this.options.color} )
-        this.yMesh = new Mesh( yGeometry, yMaterial )
-        this.yMesh.position.set ( this.position.x, this.position.y, this.position.z )
-        this.rootGroup.add( this.yMesh )
+        this.zMesh = new Mesh( yGeometry, yMaterial )
+        this.zMesh.position.set ( this.position.x, this.position.y, this.position.z )
+        this.rootGroup.add( this.zMesh )
 
         // X Axis Arrow
-        this.yArrowGroup.add ( meshCone )
-        this.rootGroup.add( this.yArrowGroup )
+        this.zArrowGroup.add ( meshCone )
+        this.rootGroup.add( this.zArrowGroup )
 
-        this.yArrow = meshCone
+        this.zArrow = meshCone
     }
 
 
@@ -273,14 +274,22 @@ class YAxis {
         let xMid = 0
         if ( geometry && geometry.boundingBox ) {
 
-            xMid = - 0.5 * (
+            xMid = - 0.5* (
                 geometry.boundingBox.max.x -
                 geometry.boundingBox.min.x
             )
         }
         geometry.translate( xMid, 0, 0 )
-
+        
         const textMesh = new Mesh( geometry, this.material )
+        if ( (this.origin == Origin.TOP_RIGHT) || (this.origin == Origin.BOTTOM_RIGHT) ) {
+
+            textMesh.rotateY( - Math.PI / 2 )
+
+        } else {
+
+            textMesh.rotateY( Math.PI / 2 )
+        }
         textMesh.position.set (
             position.x,
             position.y,
@@ -295,20 +304,20 @@ class YAxis {
 
     insertPeriods ( ) {
 
-        const insertPeriod = ( y: number ) => {
+        const insertPeriod = ( z: number ) => {
 
-            let side = -1
+            let side = 1
 
-            if ( [Origin.TOP_RIGHT, Origin.BOTTOM_RIGHT].includes (this.origin) ) side = 1
+            if ( [Origin.CENTER, Origin.TOP_RIGHT, Origin.BOTTOM_RIGHT, Origin.BOTTOM_LEFT].includes (this.origin) ) side = -1
 
             const periodSize = this.options.periodSize / 2
-            const ySize = this.options.periodSize / 16
+            const zSize = this.options.periodSize / 16
 
             const points: Vector3 [] = []
-            points.push( new Vector3( 0, -ySize + y, 0 ) )
-            points.push( new Vector3( 0, ySize + y, 0 ) )
-            points.push( new Vector3( side * periodSize, y+ySize, 0 ) )
-            points.push( new Vector3( side * periodSize, y-ySize, 0 ) )
+            points.push( new Vector3( 0, 0, -zSize + z ) )
+            points.push( new Vector3( 0, 0, zSize + z ) )
+            points.push( new Vector3( 0, side * periodSize, z + zSize ) )
+            points.push( new Vector3( 0, side * periodSize, z - zSize ) )
 
             const meshGeometry = new ConvexGeometry( points )
 
@@ -317,12 +326,12 @@ class YAxis {
             this.periodGroup.add ( line )
         }
 
-        const insertPeriodText = ( text: string, y: number ) => {
+        const insertPeriodText = ( text: string, z: number ) => {
 
-            let side = -1
-            if ( [Origin.TOP_RIGHT, Origin.BOTTOM_RIGHT].includes (this.origin) ) side = 1
+            let side = 1
+            if ( [Origin.CENTER, Origin.TOP_RIGHT, Origin.BOTTOM_RIGHT, Origin.BOTTOM_LEFT].includes (this.origin) ) side = -1
 
-            const position = new Vector3 ( side * this.options.periodSize * 1.8, y- this.fontSize/2, 0)
+            const position = new Vector3 ( 0, side * this.options.periodSize * 1.8, z )
             const textMesh = this.insertText ( text, this.fontSize, position, true )
             this.periodTexts.push ( textMesh )
             this.periodGroup.add ( textMesh )
@@ -331,66 +340,26 @@ class YAxis {
         const width = this.size
         const space = width / count
 
-        if ( this.origin == Origin.CENTER ) {
+        let startZ = 0
+        let startText = this.options.from
 
-            let startY = 0
-            let startText = this.options.from
+        for (let i = 0; i < count - 1; i++) {
+            startZ += space
+            startText += this.options.period
+            startText = Math.round ( startText * 100 )/100
+            const text = startText + ""
+            if ( startText ) {
 
-            for (let i = 0; i < count - 1; i++) {
-                startY += space
-                startText += this.options.period
-                startText = Math.round ( startText * 100 )/100
-                const text = startText + ""
-                if ( startText ) {
-
-                    insertPeriod ( startY )
-                    insertPeriodText ( text, startY )
-                }
+                insertPeriod ( startZ )
+                insertPeriodText ( text, startZ )
             }
-            this.periodGroup.position.set (
-                this.startPoint.x,
-                this.startPoint.y,
-                this.startPoint.z
-            )
-
-        } else if ( this.direction == Direction.BOTTOM_TOP ) {
-
-            let startY = 0
-            let startText = this.options.from
-
-            for (let i = 0; i < count - 1; i++) {
-                startY += space
-                insertPeriod ( startY )
-                startText += this.options.period
-                startText = Math.round ( startText * 100 )/100
-                const text = startText + ""
-                insertPeriodText ( text, startY )
-            }
-            this.periodGroup.position.set (
-                this.startPoint.x,
-                this.startPoint.y,
-                this.startPoint.z
-            )
-
-        } else{
-
-            let startY = ( count ) * space
-            let startText = this.options.from
-
-            for (let i = 0; i < count - 1; i++) {
-                startY -= space
-                insertPeriod ( startY )
-                startText += this.options.period
-                startText = Math.round ( startText * 100 )/100
-                const text = startText + ""
-                insertPeriodText ( text, startY )
-            }
-            this.periodGroup.position.set (
-                this.endPoint.x,
-                this.endPoint.y,
-                this.endPoint.z
-            )
         }
+        this.periodGroup.position.set (
+            this.startPoint.x,
+            this.startPoint.y,
+            this.startPoint.z
+        )
+
         this.rootGroup.add ( this.periodGroup )
     }
 
@@ -400,25 +369,25 @@ class YAxis {
 
         if ( this.axis.exp.stage ) {
 
-            if ( this.yMesh ) {
+            if ( this.zMesh ) {
 
-                this.rootGroup.remove( this.yMesh )
-                const material = this.yMesh.material
+                this.rootGroup.remove( this.zMesh )
+                const material = this.zMesh.material
                 if ( material instanceof Material ) material.dispose ()
-                this.yMesh.geometry.dispose ()
-                this.yMesh = null
+                this.zMesh.geometry.dispose ()
+                this.zMesh = null
             }
-            if ( this.yArrowGroup ) {
+            if ( this.zArrowGroup ) {
 
-                if ( this.yArrow ) {
+                if ( this.zArrow ) {
 
-                    this.yArrowGroup.remove ( this.yArrow )
-                    const material = this.yArrow.material
+                    this.zArrowGroup.remove ( this.zArrow )
+                    const material = this.zArrow.material
                     if ( material instanceof Material ) material.dispose ()
-                    this.yArrow.geometry.dispose ()
-                    this.yArrow = null
+                    this.zArrow.geometry.dispose ()
+                    this.zArrow = null
                 }
-                this.rootGroup.remove( this.yArrowGroup )
+                this.rootGroup.remove( this.zArrowGroup )
             }
             if ( this.textYMesh ) {
 
@@ -457,4 +426,4 @@ class YAxis {
     }
 }
 
-export default YAxis
+export default ZAxis

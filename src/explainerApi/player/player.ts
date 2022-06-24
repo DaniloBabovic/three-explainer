@@ -1,5 +1,5 @@
-import type { Explainer } from "../explainer"
-import PlayerUI from "./playerUI"
+import type { Explainer }   from "../explainer"
+import PlayerUI             from "./playerUI"
 
 class Player {
 
@@ -23,13 +23,13 @@ class Player {
 
     setDefaultValue ( defaultValue: number ) {
 
-        console.log ( defaultValue )
+        //console.log ( defaultValue )
         this.defaultValue = defaultValue
     }
 
     setMarks ( marks: {value: number, label: string} [] ) {
 
-        console.log ( marks )
+        //console.log ( marks )
         this.marks = marks
         this.ui.setMarks ( marks )
     }
@@ -56,21 +56,21 @@ class Player {
 
     setMax ( max: number ) {
 
-        console.log ( '[max = ', max )
+        //console.log ( '[max = ', max )
         this.max = max
         this.ui.explainerPlayerSlider.max = max +''
     }
 
     setMin ( min: number ) {
 
-        console.log ( min )
+        //console.log ( min )
         this.min = min
         this.ui.explainerPlayerSlider.min = min +''
     }
 
     setStep ( step: number ) {
 
-        console.log ( step )
+        //console.log ( step )
         this.step = step
     }
 }

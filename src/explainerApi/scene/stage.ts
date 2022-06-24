@@ -1,5 +1,11 @@
-import { Material, Object3D } from 'three';
+import { OrbitControls }        from 'three/examples/jsm/controls/OrbitControls.js'
+import { htmlTemplate }         from '../player/html_template'
+import  Stats                   from 'three/examples/jsm/libs/stats.module.js'
+
 import   {
+
+    Material, 
+    Object3D,
     AmbientLight,
     BoxGeometry,
     DirectionalLight,
@@ -11,11 +17,8 @@ import   {
     PlaneGeometry,
     Scene,
     Sprite,
-    WebGLRenderer }         from 'three'
-
-import  Stats               from 'three/examples/jsm/libs/stats.module.js'
-import { OrbitControls }    from 'three/examples/jsm/controls/OrbitControls.js'
-import { htmlTemplate } from '../player/html_template'
+    WebGLRenderer 
+}                           from 'three'
 
 export let stage = null as  ( Stage | null)
 export class Stage {
@@ -241,7 +244,7 @@ export class Stage {
                     //in case of map, bumpMap, normalMap, envMap ...
                     Object.keys ( obj.material ).forEach ( prop => {
 
-                        const mat =  obj.material as any
+                        const mat: any =  obj.material
                         if ( !mat[ prop ] ) return
                         if (    mat[prop] !== null &&  typeof mat[prop].dispose === 'function' )  {
 

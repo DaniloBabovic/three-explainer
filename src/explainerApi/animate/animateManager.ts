@@ -1,9 +1,14 @@
-import TWEEN, { now }                       from "@tweenjs/tween.js"
-import type { TimeNode, StartTimeModel }    from "../model"
-import type { Anime, AnimeNull }            from "../model"
+import type { Nearest3DObjectEvents }       from '../../index'
+import type { NearestCameraEvents }         from '../../index'
+import type { NearestTargetEvents }         from '../../index'
+import type { TimeNode, StartTimeModel }    from "../../index"
+import type { Anime, AnimeNull }            from "../../index"
 import type { Explainer }                   from "../explainer"
+
+import TWEEN, { now }                       from "@tweenjs/tween.js"
 import AnimateCameraPosition                from "./animateCameraPosition"
-import AnimateCameraTarget             from "./animateCameraTarget"
+import AnimateCameraTarget                  from "./animateCameraTarget"
+import Animate from './animate';
 
 class AnimateManager {
 
@@ -69,7 +74,7 @@ class AnimateManager {
             this.startTimes.push ( newStartTime )
             return newStartTime
         }
-        console.log ( 'timeNode.start', timeNode.start )
+        //console.log ( 'timeNode.start', timeNode.start )
 
         const startTime = getStartTime ( timeNode.start )
         startTime.infos.push ({
@@ -147,113 +152,319 @@ class AnimateManager {
     ----------- | | ---------- | | ------- 
     */
 
+    setCameraPosition (
+
+        value: number, 
+        animation: AnimateCameraPosition, 
+        state: {
+            updateOrbit: boolean
+            cameraAnimationDone: boolean
+            cameraTargetDone: boolean
+            cameraEvents: NearestCameraEvents[]
+            cameraTargetEvents: NearestTargetEvents[]
+        } 
+    ) {
+
+        if ( !animation.timeNode ) return      
+        // Slider time is inside camera move animation:
+        if (
+            ( value < (animation.timeNode.end * 1000 ) ) && 
+            (value > (animation.timeNode.start * 1000 ) )
+        ) {
+            const part = value - animation.timeNode.start * 1000
+            animation.insertAnimate ( part )
+            this.done = false
+            this.pause = false
+            setTimeout(() => {
+                this.pause = true
+            }, 100)
+
+            state.cameraAnimationDone = true
+            state.cameraEvents.length = 0
+
+        } else {
+
+            if ( !state.cameraAnimationDone ) {
+
+                const distanceStart = Math.abs ( value - (animation.timeNode.start * 1000 ) )
+                const eventStart = {
+                    distance: distanceStart,
+                    isStart: true,
+                    animation
+                }
+                state.cameraEvents.push ( eventStart )
+
+                const distanceEnd = Math.abs ( value - (animation.timeNode.end * 1000 ) )
+                const eventEnd = {
+                    distance: distanceEnd,
+                    isStart: false,
+                    animation
+                }
+                state.cameraEvents.push ( eventEnd )
+            }
+        }
+    }
+
+    setCameraTarget (
+        
+        value: number, 
+        animation: AnimateCameraTarget, 
+        state: {
+            updateOrbit: boolean
+            cameraAnimationDone: boolean
+            cameraTargetDone: boolean
+            cameraEvents: NearestCameraEvents[]
+            cameraTargetEvents: NearestTargetEvents[]
+        } 
+    ) {
+
+        if ( !animation.timeNode ) return      
+        // Slider time is inside camera move animation:
+        if (
+            ( value < (animation.timeNode.end * 1000 ) ) && 
+            (value > (animation.timeNode.start * 1000 ) )
+        ) {
+            
+            const part = value - animation.timeNode.start * 1000
+            animation.insertAnimate ( part )
+            this.done = false
+            this.pause = false
+            setTimeout(() => {
+                this.pause = true
+            }, 100)
+
+            state.cameraTargetDone = true
+            state.cameraTargetEvents.length = 0
+
+        } else {
+
+            if ( !state.cameraTargetDone ) {
+
+                const distanceStart = Math.abs ( value - (animation.timeNode.start * 1000 ) )
+                const eventStart = {
+                    distance: distanceStart,
+                    isStart: true,
+                    animation
+                }
+                state.cameraTargetEvents.push ( eventStart )
+
+                const distanceEnd = Math.abs ( value - (animation.timeNode.end * 1000 ) )
+                const eventEnd = {
+                    distance: distanceEnd,
+                    isStart: false,
+                    animation
+                }
+                state.cameraTargetEvents.push ( eventEnd )
+            }
+        }
+    }
+
+    resetCamera (
+            
+        state: {
+            updateOrbit: boolean
+            cameraAnimationDone: boolean
+            cameraTargetDone: boolean
+            cameraEvents: NearestCameraEvents[]
+            cameraTargetEvents: NearestTargetEvents[]
+        } 
+    ) {
+
+        const compare = ( a: NearestCameraEvents, b: NearestCameraEvents ) => {
+    
+            if ( a.distance < b.distance ) return -1
+            if ( a.distance > b.distance ) return 1            
+            return 0
+        }          
+        state.cameraEvents.sort( compare )
+        //console.log ( 'cameraEvent', cameraEvent )
+        const event = state.cameraEvents [0]
+        if ( event.isStart ) {
+
+            event.animation.reset ( )
+
+        } else {
+
+            event.animation.resetToEnd ( )
+        }
+    }
+    
+    resetCameraTarget (
+            
+        state: {
+            updateOrbit: boolean
+            cameraAnimationDone: boolean
+            cameraTargetDone: boolean
+            cameraEvents: NearestCameraEvents[]
+            cameraTargetEvents: NearestTargetEvents[]
+        } 
+    ) {
+
+        const compare = ( a: NearestTargetEvents, b: NearestTargetEvents ) => {
+    
+            if ( a.distance < b.distance ) return -1
+            if ( a.distance > b.distance ) return 1            
+            return 0
+        }          
+        state.cameraTargetEvents.sort( compare )
+        console.log ( 'cameraEvent', state.cameraTargetEvents )
+        const event = state.cameraTargetEvents [0]
+        if ( event.isStart ) {
+
+            event.animation.reset ( )
+
+        } else {
+
+            event.animation.resetToEnd ( )
+        }
+    }
+    
+    reset3DObject (
+            
+        state: {
+            updateOrbit: boolean
+            cameraAnimationDone: boolean
+            cameraTargetDone: boolean
+            cameraEvents: NearestCameraEvents[]
+            cameraTargetEvents: NearestTargetEvents[]
+            objects3D:  {
+                uuid: string,
+                object3DDone: boolean,
+                objects3DEvents: Nearest3DObjectEvents[]
+            }[]
+        } 
+    ) {
+
+        for ( let i = 0; i < state.objects3D.length; i++ ) {
+
+            const object3D = state.objects3D[i]
+            if ( !object3D.object3DDone ) {
+
+                const compare = ( a: Nearest3DObjectEvents, b: Nearest3DObjectEvents ) => {
+            
+                    if ( a.distance < b.distance ) return -1
+                    if ( a.distance > b.distance ) return 1            
+                    return 0
+                }          
+                object3D.objects3DEvents.sort( compare )
+                
+                const event = object3D.objects3DEvents [0]
+                if ( event.isStart ) {
+        
+                    event.animation.reset ( )
+        
+                } else {
+        
+                    event.animation.resetToEnd ( )
+                }
+            }
+            
+        }
+    }
+
+    set3DObjects (
+        
+        value: number, 
+        animation: Animate, 
+        state: {
+            updateOrbit: boolean
+            cameraAnimationDone: boolean
+            cameraTargetDone: boolean            
+            cameraEvents: NearestCameraEvents[]
+            cameraTargetEvents: NearestTargetEvents[],
+            objects3D: {
+                uuid: string,
+                object3DDone: boolean,
+                objects3DEvents: Nearest3DObjectEvents[]
+            }[]
+        } 
+    ) { 
+        
+        if ( !animation.timeNode ) return
+
+        let object3D : {
+            uuid: string,
+            object3DDone: boolean,
+            objects3DEvents: Nearest3DObjectEvents[]
+        } | undefined = undefined
+
+        for (let i = 0; i < state.objects3D.length; i++) {
+            const item = state.objects3D[i]
+            if ( item.uuid == animation.target.uuid ) {
+                object3D = item
+            }
+        }
+
+        if ( !object3D ) {
+            object3D = {
+                uuid: animation.target.uuid,
+                object3DDone: false,
+                objects3DEvents: []
+            }
+            state.objects3D.push ( object3D )
+        }
+        if (
+            ( value < (animation.timeNode.end * 1000 ) ) && 
+            (value > (animation.timeNode.start * 1000 ) )
+        ) {
+            const part = value - animation.timeNode.start * 1000
+            animation.insertAnimate ( part )
+            this.done = false
+            this.pause = false
+            setTimeout(() => {
+                this.pause = true
+            }, 100)
+
+            object3D.object3DDone = true
+            object3D.objects3DEvents.length = 0
+
+        } else {
+
+            if ( !object3D.object3DDone ) {
+                
+                const distanceStart = Math.abs ( value - (animation.timeNode.start * 1000 ) )
+                const eventStart = {
+                    distance: distanceStart,
+                    isStart: true,
+                    animation
+                }
+                object3D.objects3DEvents.push ( eventStart )
+
+                const distanceEnd = Math.abs ( value - (animation.timeNode.end * 1000 ) )
+                const eventEnd = {
+                    distance: distanceEnd,
+                    isStart: false,
+                    animation
+                }
+                object3D.objects3DEvents.push ( eventEnd )
+            }
+        }
+    }
+
+    
+
     onSlider ( value: number ) {
 
-        let updateOrbit = false
-        let cameraAnimationDone = false
-        let cameraTargetDone = false
+        const state = {
+
+            updateOrbit: false,
+            
+            cameraAnimationDone: false,
+            cameraTargetDone: false,
+            
+            cameraEvents: [] as NearestCameraEvents [],
+            cameraTargetEvents: [] as NearestTargetEvents [],
+            objects3D: [] as {
+                uuid: string,
+                object3DDone: boolean,
+                objects3DEvents: Nearest3DObjectEvents[]
+            }[]
+        }
 
         //console.log ( 'onSliderUP', value )
         TWEEN.removeAll ()
         this.activeAnimations.length = 0
-        interface NearestCameraEvents {
-
-            distance:   number
-            isStart:    boolean
-            animation: AnimateCameraPosition
-        }
-        interface NearestTargetEvents {
-
-            distance:   number
-            isStart:    boolean
-            animation: AnimateCameraTarget
-        }
-        const cameraEvents: NearestCameraEvents [] = [] 
-        const cameraTargetEvents: NearestTargetEvents [] = [] 
-
-        const setCameraPosition = ( animation: AnimateCameraPosition ) => {
-
-            if ( !animation.timeNode ) return      
-            // Slider time is inside camera move animation:
-            if (
-                ( value < (animation.timeNode.end * 1000 ) ) && 
-                (value > (animation.timeNode.start * 1000 ) )
-            ) {
-                const part = value - animation.timeNode.start * 1000
-                animation.insertAnimate ( part )
-                this.done = false
-                this.pause = false
-                setTimeout(() => {
-                    this.pause = true
-                }, 100)
-
-                cameraAnimationDone = true
-                cameraEvents.length = 0
-
-            } else {
-
-                if ( !cameraAnimationDone ) {
-
-                    const distanceStart = Math.abs ( value - (animation.timeNode.start * 1000 ) )
-                    const eventStart = {
-                        distance: distanceStart,
-                        isStart: true,
-                        animation
-                    }
-                    cameraEvents.push ( eventStart )
-
-                    const distanceEnd = Math.abs ( value - (animation.timeNode.end * 1000 ) )
-                    const eventEnd = {
-                        distance: distanceEnd,
-                        isStart: false,
-                        animation
-                    }
-                    cameraEvents.push ( eventEnd )
-                }
-            }
-        }
-
-        const setCameraTarget = ( animation: AnimateCameraTarget ) => {
-
-            if ( !animation.timeNode ) return      
-            // Slider time is inside camera move animation:
-            if (
-                ( value < (animation.timeNode.end * 1000 ) ) && 
-                (value > (animation.timeNode.start * 1000 ) )
-            ) {
-                const part = value - animation.timeNode.start * 1000
-                animation.insertAnimate ( part )
-                this.done = false
-                this.pause = false
-                setTimeout(() => {
-                    this.pause = true
-                }, 100)
-
-                cameraTargetDone = true
-                cameraTargetEvents.length = 0
-
-            } else {
-
-                if ( !cameraTargetDone ) {
-
-                    const distanceStart = Math.abs ( value - (animation.timeNode.start * 1000 ) )
-                    const eventStart = {
-                        distance: distanceStart,
-                        isStart: true,
-                        animation
-                    }
-                    cameraTargetEvents.push ( eventStart )
-
-                    const distanceEnd = Math.abs ( value - (animation.timeNode.end * 1000 ) )
-                    const eventEnd = {
-                        distance: distanceEnd,
-                        isStart: false,
-                        animation
-                    }
-                    cameraTargetEvents.push ( eventEnd )
-                }
-            }
-        }
+        
 
         for (let i = 0; i < this.allAnimations.length; i++) {  
         //for (let i = this.allAnimations.length -1; i > -1; i--) {
@@ -264,91 +475,33 @@ class AnimateManager {
 
             if ( animation instanceof AnimateCameraPosition ) {
 
-                updateOrbit = true
-                setCameraPosition ( animation )
+                state.updateOrbit = true
+                this.setCameraPosition ( value, animation, state )
                 continue
             }
 
             if ( animation instanceof AnimateCameraTarget ) {
 
-                updateOrbit = true
-                setCameraTarget ( animation )
+                state.updateOrbit = true
+                this.setCameraTarget ( value, animation, state )
                 continue
             }
 
-            if ( value > (animation.timeNode.end * 1000 ) ) {
+            if ( animation instanceof Animate ) {
 
-                animation.resetToEnd ()
-
-            } else if ( value > (animation.timeNode.start * 1000 ) ) {
-
-                const part = value - animation.timeNode.start * 1000
-                if ( part <  0 ) {
-
-                    console.error ( 'part <  0', part )
-                    return
-
-                } else {
-
-                    animation.insertAnimate ( part )
-                    this.done = false
-                    this.pause = false
-                    setTimeout(() => {
-                        this.pause = true
-                    }, 100)
-                }
-                
-            } else {
-                
-                animation.reset ()
+                this.set3DObjects ( value, animation, state )
             }
         }
+        // Reset Mesh, Object3D and LineSegments to Start or to end
+        this.reset3DObject ( state )
 
         // Reset camera position to Start or to end
-        if ( cameraEvents.length > 0 ) {
-
-            const compare = ( a:NearestCameraEvents, b:NearestCameraEvents ) => {
-    
-                if ( a.distance < b.distance ) return -1
-                if ( a.distance > b.distance ) return 1            
-                return 0
-            }          
-            cameraEvents.sort( compare )
-            //console.log ( 'cameraEvent', cameraEvent )
-            const event = cameraEvents [0]
-            if ( event.isStart ) {
-
-                event.animation.reset ( )
-
-            } else {
-
-                event.animation.resetToEnd ( )
-            }
-        }
+        if ( state.cameraEvents.length > 0 ) this.resetCamera ( state )
 
         // Reset camera target to Start or to end
-        if ( cameraTargetEvents.length > 0 ) {
-
-            const compare = ( a: NearestTargetEvents, b: NearestTargetEvents ) => {
-    
-                if ( a.distance < b.distance ) return -1
-                if ( a.distance > b.distance ) return 1            
-                return 0
-            }          
-            cameraTargetEvents.sort( compare )
-            //console.log ( 'cameraEvent', cameraEvent )
-            const event = cameraTargetEvents [0]
-            if ( event.isStart ) {
-
-                event.animation.reset ( )
-
-            } else {
-
-                event.animation.resetToEnd ( )
-            }
-        }
+        if ( state.cameraTargetEvents.length > 0 ) this.resetCameraTarget ( state )
         
-        if ( updateOrbit ) {
+        if ( state.updateOrbit ) {
 
             this.exp.stage.skipOrbitRender = true
             this.exp.stage.controls?.update()
@@ -362,12 +515,14 @@ class AnimateManager {
 
             this.done = false
             TWEEN.removeAll ()
-            for (let i = 0; i < this.allAnimations.length; i++) {
+            //for (let i = 0; i < this.allAnimations.length; i++) {
+            for (let i = this.allAnimations.length-1; i >-1; i--) {
 
                 const animation = this.allAnimations [ i ]
                 animation.reset ()
             }
-            for (let i = 0; i < this.timeNode.children.length; i++) {
+            //for (let i = 0; i < this.timeNode.children.length; i++) {
+            for (let i = this.timeNode.children.length-1; i >-1; i--) {    
 
                 const animate = this.timeNode.children [ i ]
                 animate.animation?.insertAnimate ( )
@@ -459,9 +614,11 @@ class AnimateManager {
             marks.push ( mark )
         }
 
-        console.log ( 'timeNode', this.timeNode )
-        console.log ( 'this.timeNode.end', this.timeNode.end )
-        console.log ( 'this.startTimes', this.startTimes )
+        /* 
+            console.log ( 'timeNode', this.timeNode )
+            console.log ( 'this.timeNode.end', this.timeNode.end )
+            console.log ( 'this.startTimes', this.startTimes )
+        */
 
         this.exp.player.setMin ( 0 )
         this.exp.player.setMax ( this.timeNode.end * 1000 )
@@ -476,7 +633,12 @@ class AnimateManager {
             this.done = true
             const toStart = ( ) => {
 
-                this.exp.player.setValue ( 0 )
+                // this.exp.stage.controls?.target.set ( 0, 0, 0 )
+                // this.exp.stage.camera?.position.set ( 0, 0, 170 )
+                // this.exp.stage.controls?.update()
+                this.exp.player.setValue ( 1 )
+                this.exp.stage.render ()
+
                 console.log( 'TWEEN.getAll().length=', TWEEN.getAll().length )
             }
             setTimeout ( toStart, 200 )

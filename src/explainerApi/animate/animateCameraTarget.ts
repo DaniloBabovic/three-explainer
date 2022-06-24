@@ -1,13 +1,12 @@
-import type { Target }                  from './../model';
-import type { AnimeNull, TimeNode }     from "../model"
+import type { Target }                  from '../../index'
+import type { AnimeNull, TimeNode }     from "../../index"
 import type { Explainer }               from "../explainer"
-import  { Vector3 }                     from "three"
 import type { Stage }                   from "../scene/stage"
 import type AnimateManager              from "./animateManager"
-
-import { Vector2 }                      from "three"
-import TWEEN, { Tween, now }            from "@tweenjs/tween.js"
 import type { OrbitControls }           from 'three/examples/jsm/controls/OrbitControls';
+
+import { Vector3 }                      from "three"
+import TWEEN, { Tween, now }            from "@tweenjs/tween.js"
 
 class AnimateCameraTarget {
 
@@ -41,7 +40,8 @@ class AnimateCameraTarget {
 
     ) {
 
-        console.log(id)
+        //console.log(id)
+        
         this.done = false
         this.stage = exp.stage
         this.print = true
@@ -80,7 +80,7 @@ class AnimateCameraTarget {
         } else {
 
             destinationVector = this.exp.coordinate.userToWorldPosition ( 
-                new Vector2 ( this.to.x, this.to.y ),this.to.z 
+                new Vector3 ( this.to.x, this.to.y, this.to.z ) 
             )
         }
 
@@ -99,7 +99,7 @@ class AnimateCameraTarget {
         } else {
         
             startVector = this.exp.coordinate.userToWorldPosition (
-                new Vector2 ( this.from.x, this.from.y ), this.from.z
+                new Vector3 ( this.from.x, this.from.y, this.from.z )
             )
         }
 

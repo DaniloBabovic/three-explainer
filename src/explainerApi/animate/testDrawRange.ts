@@ -1,6 +1,7 @@
-import { exp }                  from "../explainer"
-import type { LineSegments }        from "three"
+import type { LineSegments }    from "three"
+
 import TWEEN, { Tween, now }    from "@tweenjs/tween.js"
+import { exp }                  from "../explainer"
 
 let testDrawRange : TestDrawRange | null = null
 

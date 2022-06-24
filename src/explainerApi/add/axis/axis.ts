@@ -1,10 +1,12 @@
 import type { Explainer }           from "../../explainer"
 import type { Font }                from 'three/examples/jsm/loaders/FontLoader.js'
-import type { AxisOptions }         from "../../model"
 
-import { defaultOptions, Origin }   from "../../model"
+
+import { defaultOptions, Origin }   from "../../../index"
 import XAxis                        from "./xAxis"
 import YAxis                        from "./yAxis"
+import ZAxis                        from "./zAxis"
+import type { AxisOptions }         from "../../../index"
 
 export class Axis {
 
@@ -20,6 +22,8 @@ export class Axis {
 
     public xAxis:           XAxis | null = null
     public yAxis:           YAxis | null = null
+    public zAxis:           ZAxis | null = null
+
     public sphereRadius     = 1.5
 
     constructor ( public exp: Explainer ) {
@@ -75,7 +79,7 @@ export class Axis {
 
     public create ( ) {
 
-        console.log ( 'create X and Y axis.' )
+        console.log ( 'create X, Y and Z axis.' )
 
         // eslint-disable-next-line @typescript-eslint/no-this-alias
         const self = this
@@ -104,6 +108,17 @@ export class Axis {
                 self.origin
             )
             this.exp.yGroup = self.yAxis.rootGroup
+        }
+
+        if ( self.zAxisOptions )  {
+
+            self.zAxis = new ZAxis (
+                self,
+                self.zAxisOptions,
+                font,
+                self.origin
+            )
+            this.exp.zGroup = self.zAxis.rootGroup
         }
     }
 
