@@ -1,4 +1,23 @@
-export const htmlTemplate = `
+export const getHtmlTemplate = ( showPlayer: boolean ) => {
+
+    if ( showPlayer ) return htmlTemplateWithPlayer
+    return htmlTemplateBasic
+}
+
+const htmlTemplateBasic = `
+    <div
+        id="explainerRootDiv"
+        class="explainerRootDiv"
+    >
+        <div
+            id="threeDiv"
+            class="threeDiv"
+        >
+            Three.js Scene
+        </div>
+    </div>    
+`
+const htmlTemplateWithPlayer = `
 <div
     id="explainerRootDiv"
     class="explainerRootDiv"
@@ -11,7 +30,7 @@ export const htmlTemplate = `
     </div>
     <div
         id="explainerPlayerRootDiv"
-        class="explainerPlayerRootDiv"
+        class="explainerPlayerRootDiv"        
     >
         <table
             id="explainerPlayerTable"

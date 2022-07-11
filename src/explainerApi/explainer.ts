@@ -13,6 +13,8 @@ import AnimateCameraPos             from "./animate/animateCameraPosition"
 
 import AnimateCameraTarget          from "./animate/animateCameraTarget"
 import type { Anime }               from ".."
+import AnimateRotation              from "./animate/animateRotation"
+import { styleInject }              from "../inject_css"
 
 console.log ( 'Imports works' )
 
@@ -35,14 +37,14 @@ export class Explainer {
     public animateManager:  AnimateManager
     public player:          Player
 
-    constructor  ( font: Font, divID: string ) {
+    constructor  ( font: Font, divID: string, showPlayer: boolean ) {
 
         this.font           = font
-        this.stage          = createStage ( divID )
+        this.stage          = createStage ( divID, showPlayer )
         this.add            = new Add ( this )
         this.pick           = new Pick ( this )
         this.coordinate     = new Coordinate ( this )
-        this.player         = new Player ( this )
+        this.player         = new Player ( this, showPlayer )
         this.animateManager = new AnimateManager ( this )
     }
 
@@ -100,6 +102,34 @@ export class Explainer {
             from,
             to,
             fade,
+            onProgress
+        )
+        this.animateManager.add ( anim )
+        return anim
+    }
+
+    rotate (
+        name:         string,
+        animation:    Anime,
+        sec:          number,
+        delay:        number,
+        target:       Mesh | Object3D,
+        from:         { x: number, y: number, z: number },
+        to:           { x: number, y: number, z: number },        
+        onProgress:   ( ( progress: {percent: number} ) => void) | null = null)
+    {
+        this.animationID += 1
+        const anim = new AnimateRotation (
+            this.animateManager,
+            this.animationID,
+            name,
+            this,
+            animation,
+            sec,
+            delay,
+            target,
+            from,
+            to,
             onProgress
         )
         this.animateManager.add ( anim )
@@ -226,12 +256,12 @@ export class Explainer {
     }
 }
 
-export const createExplainer = ( divID: string ) => {
+export const createExplainer = ( divID: string, showPlayer: boolean ) => {
 
     if ( exp ) exp.free ( )
-
+    styleInject()
     const font = new Font ( helvetiker_regular )
-    exp = new Explainer ( font, divID )
+    exp = new Explainer ( font, divID, showPlayer )
     return exp
 }
 

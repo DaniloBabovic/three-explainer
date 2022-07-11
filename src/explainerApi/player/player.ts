@@ -13,12 +13,15 @@ class Player {
 
     public marks: {value: number, label: string} [] = []
 
-    public ui: PlayerUI
+    public ui: PlayerUI | null = null
 
-    constructor( protected exp: Explainer ) {
+    constructor( protected exp: Explainer, protected insertPlayerUI: boolean ) {
 
-        const onSliderChange = ( val: number ) => this.onSliderChange ( val )
-        this.ui =  new PlayerUI ( exp, onSliderChange )
+        if ( insertPlayerUI ) {
+
+            const onSliderChange = ( val: number ) => this.onSliderChange ( val )
+            this.ui =  new PlayerUI ( exp, onSliderChange )
+        }
     }
 
     setDefaultValue ( defaultValue: number ) {
@@ -31,7 +34,10 @@ class Player {
 
         //console.log ( marks )
         this.marks = marks
-        this.ui.setMarks ( marks )
+        if ( this.ui ) {
+
+            this.ui.setMarks ( marks )
+        }
     }
 
     onSliderChange ( val: number ) {
@@ -50,22 +56,32 @@ class Player {
 
         if ( value == this.value ) return
         this.value = value
-        this.ui.explainerPlayerSlider.value= value +''
-        this.ui.updateTooltipPosition ( value )
+
+        if ( this.ui ) {
+            
+            this.ui.explainerPlayerSlider.value= value +''
+            this.ui.updateTooltipPosition ( value )
+        }
     }
 
     setMax ( max: number ) {
 
         //console.log ( '[max = ', max )
-        this.max = max
-        this.ui.explainerPlayerSlider.max = max +''
+        if ( this.ui ) {
+
+            this.max = max
+            this.ui.explainerPlayerSlider.max = max +''
+        }
     }
 
     setMin ( min: number ) {
 
         //console.log ( min )
-        this.min = min
-        this.ui.explainerPlayerSlider.min = min +''
+        if ( this.ui ) {
+
+            this.min = min
+            this.ui.explainerPlayerSlider.min = min +''
+        }
     }
 
     setStep ( step: number ) {

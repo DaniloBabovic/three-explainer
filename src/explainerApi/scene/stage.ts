@@ -1,5 +1,5 @@
 import { OrbitControls }        from 'three/examples/jsm/controls/OrbitControls.js'
-import { htmlTemplate }         from '../player/html_template'
+import { getHtmlTemplate }      from '../player/html_template'
 import  Stats                   from 'three/examples/jsm/libs/stats.module.js'
 
 import   {
@@ -36,7 +36,7 @@ export class Stage {
     public scene:               Scene  = new Scene()
     public skipOrbitRender      = false
 
-    constructor ( protected divID: string ) {
+    constructor ( protected divID: string, protected showPlayer: boolean ) {
 
         this.init ( )
     }
@@ -46,7 +46,7 @@ export class Stage {
         const container = document.getElementById ( this.divID )
         if ( container ) {
 
-            container.innerHTML = htmlTemplate
+            container.innerHTML = getHtmlTemplate ( this.showPlayer )
         }
 
         const containerElement = document.getElementById ( 'threeDiv' )
@@ -288,8 +288,8 @@ export class Stage {
     }
 }
 
-export const createStage = ( divID: string ) => {
+export const createStage = ( divID: string, showPlayer: boolean ) => {
     if ( stage ) stage.free ()
-    stage = new Stage ( divID )
+    stage = new Stage ( divID, showPlayer )
     return stage
 }

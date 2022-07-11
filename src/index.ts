@@ -5,6 +5,7 @@ import type AnimateCameraPos            from "./explainerApi/animate/animateCame
 import type AnimateCameraTarget         from './explainerApi/animate/animateCameraTarget';
 import type AnimateCameraTar            from "./explainerApi/animate/animateCameraTarget"
 import type Animate                     from "./explainerApi/animate/animate";
+import type AnimateRotation             from "./explainerApi/animate/animateRotation";
 
 export const sum = (a: number, b: number):number|string => {
 
@@ -28,7 +29,7 @@ export const hi = ( name: string ): string => {
 	return `Hi ${name}`
 };
 
-export const useExplainer = createExplainer as ( divID: string) => Explainer
+export const useExplainer = createExplainer as ( divID: string, showPlayer: boolean ) => Explainer
 
 export enum Origin {
 
@@ -98,27 +99,34 @@ export interface StartTimeModel  {
     }[]
 }
 
-export type AnimeNull = Animate | AnimateCameraPos | AnimateCameraTar | null
-export type Anime = Animate | AnimateCameraPos | AnimateCameraTar
+export type AnimeNull = Animate | AnimateCameraPos | AnimateCameraTar | AnimateRotation | null
+export type Anime = Animate | AnimateCameraPos | AnimateCameraTar | AnimateRotation
 export type Target = Vector3 | { x: number, y: number, z: number,  }
 
 export interface NearestCameraEvents {
 
     distance:   number
     isStart:    boolean
-    animation: AnimateCameraPosition
+    animation:  AnimateCameraPosition
 }
 
 export interface NearestTargetEvents {
 
     distance:   number
     isStart:    boolean
-    animation: AnimateCameraTarget
+    animation:  AnimateCameraTarget
 }
 
 export interface Nearest3DObjectEvents {
 
     distance:   number
     isStart:    boolean
-    animation: Animate
+    animation:  Animate
+}
+
+export interface NearestRotationEvents {
+
+    distance:   number
+    isStart:    boolean
+    animation:  AnimateRotation
 }

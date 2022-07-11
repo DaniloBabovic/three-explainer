@@ -1,4 +1,5 @@
 import type { Nearest3DObjectEvents }       from '../../index'
+import type { NearestRotationEvents }       from '../../index'
 import type { NearestCameraEvents }         from '../../index'
 import type { NearestTargetEvents }         from '../../index'
 import type { TimeNode, StartTimeModel }    from "../../index"
@@ -8,7 +9,8 @@ import type { Explainer }                   from "../explainer"
 import TWEEN, { now }                       from "@tweenjs/tween.js"
 import AnimateCameraPosition                from "./animateCameraPosition"
 import AnimateCameraTarget                  from "./animateCameraTarget"
-import Animate from './animate';
+import Animate                              from './animate';
+import AnimateRotation                      from './animateRotation'
 
 class AnimateManager {
 
@@ -321,12 +323,7 @@ class AnimateManager {
     
     reset3DObject (
             
-        state: {
-            updateOrbit: boolean
-            cameraAnimationDone: boolean
-            cameraTargetDone: boolean
-            cameraEvents: NearestCameraEvents[]
-            cameraTargetEvents: NearestTargetEvents[]
+        state: {            
             objects3D:  {
                 uuid: string,
                 object3DDone: boolean,
@@ -358,7 +355,118 @@ class AnimateManager {
                     event.animation.resetToEnd ( )
                 }
             }
+        }
+    }
+
+    resetRotation (
             
+        state: {            
+            rotations: {
+                uuid: string,
+                rotationDone: boolean,
+                rotationsEvents: NearestRotationEvents[]
+            }[],
+        } 
+    ) {
+
+        for ( let i = 0; i < state.rotations.length; i++ ) {
+
+            const rotation = state.rotations[i]
+            if ( !rotation.rotationDone ) {
+
+                const compare = ( a: NearestRotationEvents, b: NearestRotationEvents ) => {
+            
+                    if ( a.distance < b.distance ) return -1
+                    if ( a.distance > b.distance ) return 1            
+                    return 0
+                }          
+                rotation.rotationsEvents.sort( compare )
+                
+                const event = rotation.rotationsEvents [0]
+                if ( event.isStart ) {
+        
+                    event.animation.reset ( )
+        
+                } else {
+        
+                    event.animation.resetToEnd ( )
+                }
+            }
+        }
+    }
+
+    setRotations (
+        
+        value: number, 
+        animation: AnimateRotation, 
+        state: {            
+            rotations: {
+                uuid: string,
+                rotationDone: boolean,
+                rotationsEvents: NearestRotationEvents[]
+            }[],
+        } 
+    ) { 
+        
+        if ( !animation.timeNode ) return
+
+        let rotation : {
+            uuid: string,
+                rotationDone: boolean,
+                rotationsEvents: NearestRotationEvents[]
+        } | undefined = undefined
+
+        for (let i = 0; i < state.rotations.length; i++) {
+            
+            const item = state.rotations[i]
+            if ( item.uuid == animation.target.uuid ) {
+                rotation = item
+            }
+        }
+
+        if ( !rotation ) {
+            rotation = {
+                uuid: animation.target.uuid,
+                rotationDone: false,
+                rotationsEvents: []
+            }
+            state.rotations.push ( rotation )
+        }
+        if (
+            ( value < (animation.timeNode.end * 1000 ) ) && 
+            (value > (animation.timeNode.start * 1000 ) )
+        ) {
+            const part = value - animation.timeNode.start * 1000
+            animation.insertAnimate ( part )
+            this.done = false
+            this.pause = false
+            setTimeout(() => {
+                this.pause = true
+            }, 100)
+
+            rotation.rotationDone = true
+            rotation.rotationsEvents.length = 0
+
+        } else {
+
+            if ( !rotation.rotationDone ) {
+                
+                const distanceStart = Math.abs ( value - (animation.timeNode.start * 1000 ) )
+                const eventStart = {
+                    distance: distanceStart,
+                    isStart: true,
+                    animation
+                }
+                rotation.rotationsEvents.push ( eventStart )
+
+                const distanceEnd = Math.abs ( value - (animation.timeNode.end * 1000 ) )
+                const eventEnd = {
+                    distance: distanceEnd,
+                    isStart: false,
+                    animation
+                }
+                rotation.rotationsEvents.push ( eventEnd )
+            }
         }
     }
 
@@ -389,6 +497,7 @@ class AnimateManager {
         } | undefined = undefined
 
         for (let i = 0; i < state.objects3D.length; i++) {
+            
             const item = state.objects3D[i]
             if ( item.uuid == animation.target.uuid ) {
                 object3D = item
@@ -441,8 +550,6 @@ class AnimateManager {
         }
     }
 
-    
-
     onSlider ( value: number ) {
 
         const state = {
@@ -458,7 +565,12 @@ class AnimateManager {
                 uuid: string,
                 object3DDone: boolean,
                 objects3DEvents: Nearest3DObjectEvents[]
-            }[]
+            }[],
+            rotations: [] as {
+                uuid: string,
+                rotationDone: boolean,
+                rotationsEvents: NearestRotationEvents[]
+            }[],
         }
 
         //console.log ( 'onSliderUP', value )
@@ -491,9 +603,17 @@ class AnimateManager {
 
                 this.set3DObjects ( value, animation, state )
             }
+
+            if ( animation instanceof AnimateRotation ) {
+
+                this.setRotations ( value, animation, state )
+            }
         }
         // Reset Mesh, Object3D and LineSegments to Start or to end
         this.reset3DObject ( state )
+
+        // Reset Rotations
+        if ( state.rotations.length > 0 ) this.resetRotation ( state )
 
         // Reset camera position to Start or to end
         if ( state.cameraEvents.length > 0 ) this.resetCamera ( state )
