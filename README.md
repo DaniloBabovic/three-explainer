@@ -26,6 +26,7 @@ Automatic coordinate transformation from user to browser to Three.js coordinate 
 2. Fade-in-out chain animation
 3. Camera position chain animation 
 4. Camera target chain animation 
+5. Object rotate chain animation
 
 ## Player:
 1. Video-like pause-stop controls
