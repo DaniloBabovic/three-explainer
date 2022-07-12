@@ -6,7 +6,8 @@ import type AnimateManager          from "./animateManager"
 import TWEEN, { Tween, now }        from "@tweenjs/tween.js"
 import type { Euler, Mesh }         from "three"
 import type { Object3D }            from "three"
-import { degToRad } from "three/src/math/MathUtils"
+import { degToRad }                 from "../utils"
+
 
 class AnimateRotation {
 
