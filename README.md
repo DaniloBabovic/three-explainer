@@ -43,13 +43,16 @@ npm i @mapalchemy/explainer
 
 ```
 
+## Live vue example
+[Explainer example vue](https://explainervue.mapalchemy.com/)
+
 ## Documentation ##
 
 [Explainer doc Link](https://mathdoc.mapalchemy.com/)
 
 ## Vue install ##
 
-This is example what you can animate with only 100 lines of code:
+This is example what you can animate with only 100 lines of code with Vue3:
 
 [Vue install doc Link](https://github.com/DaniloBabovic/three-explainer/blob/main/VUE_INSTALL.md)
 
