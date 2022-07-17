@@ -1,4 +1,4 @@
-import { CSS3DObject }                          from 'three/examples/jsm/renderers/CSS3DRenderer'
+import { CSS3DObject }                          from '../../../explainerApi/CSS3DRenderer'
 import type { ParentGL, ParentCSS }             from '../../../index'
 
 import { 

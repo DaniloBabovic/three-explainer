@@ -1,4 +1,4 @@
-import type { CSS3DObject }             from 'three/examples/jsm/renderers/CSS3DRenderer'
+import type { CSS3DObject }             from './explainerApi/CSS3DRenderer'
 import type { Object3D }                from 'three'
 import type { Mesh }                    from 'three'
 import type { Scene }                   from 'three'

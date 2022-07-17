@@ -1,5 +1,5 @@
 import type {  Material, Mesh } from "three"
-import type { CSS3DObject }     from 'three/examples/jsm/renderers/CSS3DRenderer'
+import type { CSS3DObject }     from '../../../explainerApi/CSS3DRenderer'
 import VectorMulti              from "./vector_like"
 
 class MaterialLike {
