@@ -1,5 +1,6 @@
+import type { D3 }                  from './../index';
 import { helvetiker_regular }       from "../font"
-import { Mesh, Object3D, Vector3 }  from "three"
+import { Object3D, Vector3 }        from "three"
 import { Font }                     from "three/examples/jsm/loaders/FontLoader.js"
 import { Add }                      from "./add/add"
 import Animate                      from "./animate/animate"
@@ -7,7 +8,7 @@ import AnimateCameraToCenter        from "./animate/animateCameraToCenter"
 import AnimateManager               from "./animate/animateManager"
 import Coordinate                   from "./scene/coordinate"
 import Pick                         from "./scene/pick"
-import { createStage, Stage }       from "./scene/stage"
+import type { Stage }               from "./scene/stage"
 import Player                       from "./player/player"
 import AnimateCameraPos             from "./animate/animateCameraPosition"
 
@@ -22,12 +23,10 @@ export let exp = null as  ( Explainer | null)
 
 export class Explainer {
 
-    public stage:           Stage
     public add:             Add
     public pickEnable       = true
     public pick:            Pick
-    public coordinate:      Coordinate
-    public font:            Font
+    public coordinate:      Coordinate    
 
     public xGroup:          Object3D | null = null
     public yGroup:          Object3D | null = null
@@ -37,10 +36,13 @@ export class Explainer {
     public animateManager:  AnimateManager
     public player:          Player
 
-    constructor  ( font: Font, divID: string, showPlayer: boolean ) {
-
-        this.font           = font
-        this.stage          = createStage ( divID, showPlayer )
+    constructor  ( 
+        public stage: Stage,
+        public font: Font, 
+        public divID: string, 
+        public showPlayer: boolean,
+    ) {
+        
         this.add            = new Add ( this )
         this.pick           = new Pick ( this )
         this.coordinate     = new Coordinate ( this )
@@ -52,7 +54,7 @@ export class Explainer {
         name:         string,
         sec:          number,
         delay:        number,
-        target:       Mesh | Object3D,
+        target:       D3,
         from:         { x: number, y: number, z: number },
         to:           { x: number, y: number, z: number },
         fade:         { from: number, to: number },
@@ -83,7 +85,7 @@ export class Explainer {
         animation:    Anime,
         sec:          number,
         delay:        number,
-        target:       Mesh | Object3D,
+        target:       D3,
         from:         { x: number, y: number, z: number },
         to:           { x: number, y: number, z: number },
         fade:         { from: number, to: number },
@@ -113,7 +115,7 @@ export class Explainer {
         animation:    Anime,
         sec:          number,
         delay:        number,
-        target:       Mesh | Object3D,
+        target:       D3,
         from:         { x: number, y: number, z: number },
         to:           { x: number, y: number, z: number },        
         onProgress:   ( ( progress: {percent: number} ) => void) | null = null)
@@ -252,16 +254,16 @@ export class Explainer {
     free ( ) {
 
         this.add.free ( )
-        this.stage.free ()
+        //this.stage.free ()
     }
 }
 
-export const createExplainer = ( divID: string, showPlayer: boolean ) => {
+export const createExplainer = ( stage: Stage, divID: string, showPlayer: boolean ) => {
 
     if ( exp ) exp.free ( )
     styleInject()
     const font = new Font ( helvetiker_regular )
-    exp = new Explainer ( font, divID, showPlayer )
+    exp = new Explainer ( stage, font, divID, showPlayer )
     return exp
 }
 

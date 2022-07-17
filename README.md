@@ -21,6 +21,12 @@ Automatic coordinate transformation from user to browser to Three.js coordinate 
 ## 3D objects
 - Line, Curve, Text, Plane, Cube, Sphere object creation
 
+## HTML Inside!
+- Insert the HTML snippet or the web page
+- Render using CSS3DRenderer without dept problem
+- Render other 3D objects using WebGLRenderer
+- Simple HTML requires only one line of code
+
 ## Animations: 
 1. Object position chain animation
 2. Fade-in-out chain animation

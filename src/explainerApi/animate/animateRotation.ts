@@ -1,13 +1,11 @@
-import type { AnimeNull, TimeNode } from "../../index"
-import type { Explainer }           from "../explainer"
-import type { Stage }               from "../scene/stage"
-import type AnimateManager          from "./animateManager"
+import type { AnimeNull, D3, TimeNode } from "../../index"
+import type { Explainer }               from "../explainer"
+import type { Stage }                   from "../scene/stage"
+import type AnimateManager              from "./animateManager"
 
-import TWEEN, { Tween, now }        from "@tweenjs/tween.js"
-import type { Euler, Mesh }         from "three"
-import type { Object3D }            from "three"
-import { degToRad }                 from "../utils"
-
+import TWEEN, { Tween, now }            from "@tweenjs/tween.js"
+import type { Euler }                   from "three"
+import { degToRad }                     from "../utils"
 
 class AnimateRotation {
 
@@ -33,7 +31,7 @@ class AnimateRotation {
         public    after:        AnimeNull = null,
         public    sec:          number,
         public    delay:        number,        
-        public    target:       Mesh | Object3D,
+        public    target:       D3,
         protected from:         { x: number, y: number, z: number },
         protected to:           { x: number, y: number, z: number },        
         protected onProgress:   ( ( progress: {percent: number} ) => void) | null = null
@@ -121,7 +119,7 @@ class AnimateRotation {
             this.from.z
         )
 
-        this.tween = new TWEEN.Tween ( this.target.rotation )
+        this.tween = new TWEEN.Tween ( this.target.rotation as unknown as Euler )
         this.tween.delay  ( this.delay * 1000 )
         this.tween.to ( this.to, this.sec * 1000 )
         //this.tween.easing(TWEEN.Easing.Quadratic.Out)

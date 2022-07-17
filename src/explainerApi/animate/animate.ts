@@ -1,12 +1,13 @@
-import type { AnimeNull, TimeNode } from "../../index"
-import type { Explainer }           from "../explainer"
-import type { Stage }               from "../scene/stage"
-import type AnimateManager          from "./animateManager"
+import type { AnimeNull, D3, TimeNode } from "../../index"
+import type { Explainer }               from "../explainer"
+import type { Stage }                   from "../scene/stage"
+import type AnimateManager              from "./animateManager"
 
-import TWEEN, { Tween, now }        from "@tweenjs/tween.js"
-import { Line, Material }           from "three"
-import { Mesh, Vector3 }            from "three"
-import { Object3D }                 from "three"
+import TWEEN, { Tween, now }            from "@tweenjs/tween.js"
+import { Line, Material }               from "three"
+import { Mesh, Vector3 }                from "three"
+import { Object3D }                     from "three"
+import MeshLike from "../add/html/mesh_like"
 
 class Animate {
 
@@ -34,7 +35,7 @@ class Animate {
         public    after:        AnimeNull = null,
         public    sec:          number,
         public    delay:        number,        
-        public    target:       Mesh | Object3D,
+        public    target:       D3,
         protected from:         { x: number, y: number, z: number },
         protected to:           { x: number, y: number, z: number },
         protected fade:         { from: number, to: number },
@@ -55,14 +56,14 @@ class Animate {
                 if ( target instanceof Object3D ) {
                     target.children.forEach ( mesh => {
 
-                        if ( mesh instanceof Mesh || mesh instanceof Line ) {
+                        if ( mesh instanceof Mesh || mesh instanceof Line || mesh instanceof MeshLike ) {
                             const material = mesh.material as Material
                             material.opacity = fade.from
                             material.needsUpdate = true
                         }
                     });
                 }
-                if ( target instanceof Mesh  || target instanceof Line ) {
+                if ( target instanceof Mesh || target instanceof MeshLike || target instanceof Line ) {
 
                     const material = target.material as Material
                     //console.log(opacity)
@@ -132,14 +133,14 @@ class Animate {
         if ( this.target instanceof Object3D ) {
             this.target.children.forEach ( mesh => {
 
-                if ( mesh instanceof Mesh ) {
+                if ( mesh instanceof Mesh || mesh instanceof MeshLike ) {
                     const material = mesh.material as Material
                     material.opacity = this.fade.to
                     material.needsUpdate = true
                 }
             });
         }
-        if ( this.target instanceof Mesh ) {
+        if ( this.target instanceof Mesh || this.target instanceof MeshLike ) {
 
             const material = this.target.material as Material
             material.opacity = this.fade.to
@@ -166,14 +167,14 @@ class Animate {
         if ( this.target instanceof Object3D ) {
             this.target.children.forEach ( mesh => {
 
-                if ( mesh instanceof Mesh ) {
+                if ( mesh instanceof Mesh || mesh instanceof MeshLike ) {
                     const material = mesh.material as Material
                     material.opacity = this.fade.from
                     material.needsUpdate = true
                 }
             });
         }
-        if ( this.target instanceof Mesh ) {
+        if ( this.target instanceof Mesh || this.target instanceof MeshLike ) {
 
             const material = this.target.material as Material
             material.opacity = this.fade.from
@@ -199,13 +200,11 @@ class Animate {
         this.manager.onStart ( this )
         const percentTarget = { percent: 0 }
         
-        this.target.position.set (
-            this.fromWorld.x,
-            this.fromWorld.y,
-            this.fromWorld.z
-        )
+        this.target.position.x = this.fromWorld.x
+        this.target.position.y = this.fromWorld.y
+        this.target.position.z = this.fromWorld.z
 
-        this.tween = new TWEEN.Tween ( this.target.position )
+        this.tween = new TWEEN.Tween ( this.target.position as unknown as Vector3 )
         this.tween.delay  ( this.delay * 1000 )
         this.tween.to ( this.toWorld, this.sec * 1000 )
         //this.tween.easing(TWEEN.Easing.Quadratic.Out)
@@ -236,14 +235,14 @@ class Animate {
                 if ( this.target instanceof Object3D ) {
                     this.target.children.forEach ( mesh => {
 
-                        if ( mesh instanceof Mesh ) {
+                        if ( mesh instanceof Mesh || mesh instanceof MeshLike ) {
                             const material = mesh.material as Material
                             material.opacity = opacity
                             material.needsUpdate = true
                         }
                     });
                 }
-                if ( this.target instanceof Mesh ) {
+                if ( this.target instanceof Mesh || this.target instanceof MeshLike ) {
 
                     const material = this.target.material as Material
                     material.opacity = opacity

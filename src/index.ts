@@ -1,35 +1,45 @@
+import type { CSS3DObject }             from 'three/examples/jsm/renderers/CSS3DRenderer'
+import type { Object3D }                from 'three'
+import type { Mesh }                    from 'three'
+import type { Scene }                   from 'three'
+import { Color }                        from 'three'
+import { NoBlending }                   from 'three'
+import { DoubleSide }                   from 'three'
+
+import type { Stage }                   from './explainerApi/scene/stage'
 import { createExplainer, Explainer }   from "./explainerApi/explainer"
-import type { Vector3 }                 from 'three';
-import type AnimateCameraPosition       from './explainerApi/animate/animateCameraPosition';
+import type { Vector3 }                 from 'three'
+import type AnimateCameraPosition       from './explainerApi/animate/animateCameraPosition'
 import type AnimateCameraPos            from "./explainerApi/animate/animateCameraPosition"
-import type AnimateCameraTarget         from './explainerApi/animate/animateCameraTarget';
+import type AnimateCameraTarget         from './explainerApi/animate/animateCameraTarget'
 import type AnimateCameraTar            from "./explainerApi/animate/animateCameraTarget"
-import type Animate                     from "./explainerApi/animate/animate";
-import type AnimateRotation             from "./explainerApi/animate/animateRotation";
+import type Animate                     from "./explainerApi/animate/animate"
+import type AnimateRotation             from "./explainerApi/animate/animateRotation"
+import type MeshLike                    from './explainerApi/add/html/mesh_like'
 
 export const sum = (a: number, b: number):number|string => {
 
 	if ('development' === process.env.NODE_ENV) {
 
-		console.log('boop test');
+		console.log('boop')
 	}
-	return a + b;
-};
+	return a + b
+}
 
 if ('development' === process.env.NODE_ENV) {
 
-    console.log(' mode');
+    console.log(' mode')
 } else {
 
-    console.log('production mode');
+    console.log('production mode')
 }
 
 export const hi = ( name: string ): string => {
 
 	return `Hi ${name}`
-};
+}
 
-export const useExplainer = createExplainer as ( divID: string, showPlayer: boolean ) => Explainer
+export const useExplainer = createExplainer as ( stage: Stage, divID: string, showPlayer: boolean ) => Explainer
 
 export enum Origin {
 
@@ -130,3 +140,33 @@ export interface NearestRotationEvents {
     isStart:    boolean
     animation:  AnimateRotation
 }
+
+
+export const defaultCss = {
+
+    position:   'absolute',
+    color:      "#FFFFFF",
+    background: 'blue',
+    padding:    '0px',
+    margin:     '0px',
+    fontSize:   '128px',
+    lineHeight: '128px',
+    overflow: 'hidden'
+}
+
+export const standardMaterial = {
+
+    transparent: true,
+    opacity:    0,
+    color:      new Color ( '#000000' ),
+    emissive:   new Color('#000000'),
+    metalness:  0.5,
+    roughness:  0.5,
+    blending:   NoBlending,
+    side:       DoubleSide,
+}
+
+export type ParentGL = Mesh | Scene | Object3D | null
+export type ParentCSS = CSS3DObject | Scene | Object3D | null
+
+export type D3 = Mesh | Object3D | MeshLike

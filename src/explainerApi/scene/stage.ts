@@ -1,6 +1,6 @@
-import { OrbitControls }        from 'three/examples/jsm/controls/OrbitControls.js'
-import { getHtmlTemplate }      from '../player/html_template'
-import  Stats                   from 'three/examples/jsm/libs/stats.module.js'
+import { OrbitControls }            from 'three/examples/jsm/controls/OrbitControls.js'
+import { getHtmlTemplate }          from '../player/html_template'
+import  Stats                       from 'three/examples/jsm/libs/stats.module.js'
 
 import   {
 
@@ -17,8 +17,13 @@ import   {
     PlaneGeometry,
     Scene,
     Sprite,
-    WebGLRenderer 
-}                           from 'three'
+    WebGLRenderer,    
+    MeshStandardMaterial,
+    Color,
+    NoBlending
+}                                       from 'three'
+
+import { CSS3DRenderer, CSS3DObject }   from 'three/examples/jsm/renderers/CSS3DRenderer'
 
 export let stage = null as  ( Stage | null)
 export class Stage {
@@ -26,6 +31,7 @@ export class Stage {
     public camera:              PerspectiveCamera | null = null
     public controls:            OrbitControls | null = null
     public renderer:            WebGLRenderer | null = null
+    public rendererCSS:         CSS3DRenderer | null = null    
     public ambientLight:        AmbientLight | null = null
     public sprite:              Sprite | null = null
     public stats:               Stats | null  = null
@@ -34,30 +40,40 @@ export class Stage {
     public wall:                Mesh| null = null
     public cube:                Mesh| null = null
     public scene:               Scene  = new Scene()
+    public sceneCSS:            Scene  = new Scene()
     public skipOrbitRender      = false
+    public outDiv:              HTMLDivElement | null = null
 
     constructor ( protected divID: string, protected showPlayer: boolean ) {
-
+       
         this.init ( )
     }
 
     init ( ) {
 
+
         const container = document.getElementById ( this.divID )
+        this.outDiv = document.createElement ( 'div' )
+        this.outDiv.style.position = 'absolute'
+        this.outDiv.style.left = '-5000px'        
+        this.outDiv.style.overflow = 'hidden'
+        
         if ( container ) {
-
+            
             container.innerHTML = getHtmlTemplate ( this.showPlayer )
+            container.append ( this.outDiv )
         }
-
+                
         const containerElement = document.getElementById ( 'threeDiv' )
+        const containerElementCss = document.getElementById ( 'threeCssDiv' )
 
         console.log ( 'Stage constructor', containerElement )
 
         let width = 100
         let height = 100
-
+        
+        this.containerElement = containerElement
         if ( containerElement?.clientWidth && containerElement?.clientHeight ) {
-            this.containerElement = containerElement
             width = containerElement?.clientWidth
             height = containerElement?.clientHeight
             //console.log ( width, height )
@@ -77,30 +93,34 @@ export class Stage {
         this.camera.position.y = this.cameraStartPosition.y
         this.camera.position.z = this.cameraStartPosition.z
 
-        //WebGLRenderer
-        //this.renderer = new WebGLRenderer({ antialias: true, alpha: true })
-        //this.renderer = new WebGLRenderer({ antialias: true })
-        this.renderer = new WebGLRenderer({
-
-            alpha: true,
-            antialias: true
-
-        })
+        //WebGLRenderer        
+        this.renderer = new WebGLRenderer({ alpha: true, antialias: true})
         this.renderer.setSize( width, height )
-        this.renderer.setClearColor ( '#000000', 1 )
+        this.renderer.setClearColor( 0x000000, 0 );
         this.renderer.setPixelRatio(window.devicePixelRatio)
         //this.renderer.autoClear = false;
 
+        //CSS3DRenderer
+        this.rendererCSS = new CSS3DRenderer()
+        this.rendererCSS.setSize( width, height )
+        this.rendererCSS.domElement.style.position = 'absolute'
+        this.rendererCSS.domElement.style.top = '0'
+        
+        
         if ( containerElement ) {
-
-            containerElement.innerHTML = ``
+            
+            //containerElement.innerHTML = ``
             containerElement.appendChild ( this.renderer.domElement )
+        }        
+        if ( containerElementCss ) {
+
+            containerElementCss.appendChild( this.rendererCSS.domElement )
         }
         //const oneRem = parseInt(getComputedStyle(document.documentElement).fontSize)
 
-        this.controls = new OrbitControls ( this.camera, this.renderer.domElement)
-        //this.controls = createOrbit  ( this.camera, this.renderer.domElement)
-        //this.controls = new MapControls( this.camera, this.renderer.domElement );
+        //this.controls = new OrbitControls ( this.camera, this.renderer.domElement)
+        this.controls = new OrbitControls ( this.camera, this.rendererCSS.domElement)
+        
         this.controls.mouseButtons = {
             LEFT: MOUSE.PAN,
             MIDDLE: MOUSE.DOLLY,
@@ -139,7 +159,6 @@ export class Stage {
         const onResize = () => { this.onWindowResize ( ) }
         window.addEventListener('resize', onResize, false)
 
-
         //Light
         this.addLight ( )
 
@@ -152,13 +171,57 @@ export class Stage {
             containerElement.appendChild( this.stats.dom )
         }
         this.onWindowResize ( )
+
+        //this.testCSSText ( )
         console.log ( 'Stage success...' )
+    }
+
+    testCSSText ( ) {
+
+        const element = document.createElement( 'div' );
+        element.style.position = 'absolute'
+        element.style.color = "#FFFFFF"
+        element.style.background = 'rgba(0, 0, 70, 40)'
+        element.style['padding'] = '10px'
+        element.style['margin'] = '0px'
+        element.style.fontSize = '128px'
+        element.style.lineHeight = '128px'
+        element.innerText = 'Hello!'
+        
+        if ( this.outDiv ) {
+
+            this.outDiv.append ( element )
+            const rect = element.getBoundingClientRect()
+            console.log ( 'rect:', rect, element )
+            this.outDiv.removeChild ( element )
+
+            const domObject = new CSS3DObject ( element )            
+            domObject.position.set ( 0, 10, 10 )
+            const size = 0.1
+            domObject.scale.set ( size, size, size )
+            this.sceneCSS.add( domObject )
+
+            const material = new MeshStandardMaterial({
+                transparent: true,
+                opacity	: 0,
+                color	: new Color('#000000'),
+                emissive:  new Color('#000000'),
+                metalness: 0.5,
+                roughness: 0.5,
+                blending: NoBlending,
+                side	: DoubleSide,
+            });
+            const geometry = new PlaneGeometry( rect.width * size, rect.height * size )
+            const mesh = new Mesh( geometry, material )
+            mesh.position.set ( 0, 10, 10 )
+            this.scene.add( mesh )
+        }
     }
 
     insertWall ( ) {
 
         const geometry = new PlaneGeometry( 400, 400 );
-        const material = new MeshBasicMaterial( {
+        const material = new MeshStandardMaterial( {
             color: 0x444444,
             side: DoubleSide,
             transparent: true,
@@ -171,14 +234,11 @@ export class Stage {
 
     public onWindowResize ( ) {
 
-        if ( !this.containerElement ) return
         if ( ! this.renderer ) return
-        if ( ! this.renderer.domElement ) return
-
         this.renderer.setSize ( 0, 0 )
-
+        
         setTimeout(() => {
-
+            
             if ( !this.containerElement ) return
             if ( ! this.renderer ) return
             if ( ! this.renderer.domElement ) return
@@ -190,6 +250,10 @@ export class Stage {
             if ( this.renderer ) {
 
                 this.renderer.setSize ( width, height )
+            }
+            if ( this.rendererCSS ) {
+
+                this.rendererCSS.setSize ( width, height )
             }
             if ( this.camera ) {
 
@@ -203,10 +267,14 @@ export class Stage {
     render() {
 
         if ( this.scene == null ) return
+        if ( this.sceneCSS == null ) return
         if ( this.camera == null ) return
         if ( this.renderer == null ) return
+        if ( this.rendererCSS == null ) return
 
+        this.rendererCSS.render ( this.sceneCSS, this.camera )
         this.renderer.render ( this.scene, this.camera )
+
         if ( this.stats ) this.stats.update()
     }
 
@@ -244,7 +312,7 @@ export class Stage {
                     //in case of map, bumpMap, normalMap, envMap ...
                     Object.keys ( obj.material ).forEach ( prop => {
 
-                        const mat: any =  obj.material
+                        const mat =  obj.material as any
                         if ( !mat[ prop ] ) return
                         if (    mat[prop] !== null &&  typeof mat[prop].dispose === 'function' )  {
 

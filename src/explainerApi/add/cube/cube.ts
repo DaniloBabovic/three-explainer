@@ -59,11 +59,12 @@ class Cube {
         const pos = exp.coordinate.userToWorldPosition (
 
             new Vector3 ( position[0], position[1], position[2] )
-            
         )
+
         if ( pos ) {
 
             this.position = pos
+            
         } else {
 
             this.position = new Vector3 ()

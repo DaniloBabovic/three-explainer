@@ -10,10 +10,16 @@ const htmlTemplateBasic = `
         class="explainerRootDiv"
     >
         <div
+            id="threeCssDiv"
+            class="threeCssDiv"
+        >
+            
+        </div>
+        <div
             id="threeDiv"
             class="threeDiv"
         >
-            Three.js Scene
+            
         </div>
     </div>    
 `
@@ -23,11 +29,18 @@ const htmlTemplateWithPlayer = `
     class="explainerRootDiv"
 >
     <div
+        id="threeCssDiv"
+        class="threeCssDiv"
+    >        
+    </div>
+
+    <div
         id="threeDiv"
         class="threeDiv"
-    >
-        Three.js Scene
+        style="pointer-events: none;"
+    >    
     </div>
+    
     <div
         id="explainerPlayerRootDiv"
         class="explainerPlayerRootDiv"        

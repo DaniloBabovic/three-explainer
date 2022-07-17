@@ -309,7 +309,7 @@ class AnimateManager {
             return 0
         }          
         state.cameraTargetEvents.sort( compare )
-        console.log ( 'cameraEvent', state.cameraTargetEvents )
+        //console.log ( 'cameraEvent', state.cameraTargetEvents )
         const event = state.cameraTargetEvents [0]
         if ( event.isStart ) {
 

@@ -1,5 +1,11 @@
 const css = `
 
+html, body {
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+  }
+  
 .test {
 
     color: chocolate;
@@ -11,6 +17,15 @@ const css = `
     min-height: 100%;
     display: flex;
     flex-direction: column;
+}
+
+.threeCssDiv {
+
+    left: 0px;
+    top: 0px;
+    position: absolute;
+    width: 100%;
+    height: 100%;
 }
 
 .threeDiv {
@@ -132,7 +147,18 @@ td {
     position: relative;
     width: 0px;
     height: 40px;
-    margin-top: -42px
+    margin-top: -42px;
+}
+
+.html {
+
+    position:   'absolute';
+    color:      "#00FF00";
+    background: 'transparent';
+    padding:    '0px';
+    margin:     '0px';
+    fontSize:   '128px';
+    lineHeight: '128px';
 }
 
 `
@@ -140,6 +166,16 @@ td {
 interface Style extends HTMLStyleElement {
 
     styleSheet: {cssText: string}
+}
+
+export let cssExplainer: Style | null = null
+
+export const addStyle = ( style: string ) => {
+
+    if ( cssExplainer && cssExplainer.styleSheet ) {
+
+        cssExplainer.styleSheet.cssText += style
+    }
 }
 
 export const styleInject = ( ) => {
@@ -172,4 +208,6 @@ export const styleInject = ( ) => {
 
         style.appendChild(document.createTextNode(css))
     }
+    
+    cssExplainer = style
 }

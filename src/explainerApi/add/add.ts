@@ -1,12 +1,14 @@
-import Plane                        from "./plane/plane";
-import type { Vector2, Vector3 }    from "three";
-import type { Explainer }           from "../explainer";
-import { Axis }                     from "./axis/axis";
-import Cube                         from "./cube/cube";
-import Curve                        from "./curve/curve";
-import Line                         from "./line/line";
-import Sphere                       from "./sphere/sphere";
-import Text                         from "./text/text";
+import Plane                                    from "./plane/plane"
+import type { Vector2, Vector3 }                from "three"
+import type { MeshStandardMaterialParameters }  from "three"
+import type { Explainer }                       from "../explainer"
+import { Axis }                                 from "./axis/axis"
+import Cube                                     from "./cube/cube"
+import Curve                                    from "./curve/curve"
+import Line                                     from "./line/line"
+import Sphere                                   from "./sphere/sphere"
+import Text                                     from "./text/text"
+import HTML3D                                   from "./html/html3d"
 
 export class Add {
 
@@ -17,6 +19,7 @@ export class Add {
     public text3Ds: Text[]      = []
     public curves:  Curve[]     = []
     public lines:   Line[]      = []
+    public html3ds:  HTML3D[]   = []
 
     constructor ( protected exp: Explainer ) {
 
@@ -138,6 +141,25 @@ export class Add {
         return line
     }
 
+    html3d ( 
+        paramMaterial:   MeshStandardMaterialParameters,
+        html:            string,
+        css:             CSSStyleDeclaration,
+        position:        [ number, number, number ]
+    ) {
+
+        const html3d = new HTML3D ( 
+
+            this.exp,
+            paramMaterial,
+            html,
+            css,
+            position
+        )
+        this.html3ds.push ( html3d )
+        return html3d
+    }
+
     insert ( ) {
 
         for (let i = 0; i < this.cubes.length; i++) {
@@ -180,6 +202,13 @@ export class Add {
             const line = this.lines [ i ]
             line.create ()
             line.insert ( )
+        }
+
+        for (let i = 0; i < this.html3ds.length; i++) {
+
+            const html3d = this.html3ds [ i ]
+            html3d.create ()
+            html3d.insert ( )
         }
     }
 
