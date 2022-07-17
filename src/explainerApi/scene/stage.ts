@@ -105,6 +105,7 @@ export class Stage {
         this.rendererCSS.setSize( width, height )
         this.rendererCSS.domElement.style.position = 'absolute'
         this.rendererCSS.domElement.style.top = '0'
+        this.rendererCSS.domElement.style.background = 'black'
         
         
         if ( containerElement ) {
